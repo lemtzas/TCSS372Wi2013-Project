@@ -9,5 +9,15 @@
 #define	REGISTER_H
 #include "global.h"
 
+typedef unsigned short Register;
+
+/**Initialize to 0.*/
+char* reg_init(Register *this);
+/**Set Low Order Byte.*/
+char* reg_setLOB(Register *this, Byte b);
+/**Set High Order Byte.*/
+char* reg_setHOB(Register *this, Byte b);
+
+
 #endif	/* REGISTER_H */
 

@@ -8,6 +8,8 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 
+typedef unsigned short Word;
+typedef unsigned char Byte;
 
 
 #endif	/* GLOBAL_H */
