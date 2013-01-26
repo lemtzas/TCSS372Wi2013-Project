@@ -9,7 +9,8 @@
 #define	MEMORY_H
 #include "global.h"
 
-#define MEM_SIZE 0x1001
+//this gives 2^16 memory locations minus the 0x3000 offset
+#define MEM_SIZE 0xD000
 #define MEM_OFFSET 0x3000
 
 typedef struct {

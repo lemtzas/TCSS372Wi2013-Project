@@ -1,5 +1,6 @@
 #include "memory.h"
 #include "global.h"
+
 char* mem_init(Memory* this)
 {
     int i;
@@ -36,7 +37,7 @@ char* mem_setw(Memory *this , unsigned int location , Word word)
     if(!word) return "[mem_setw] word requires a pointer!";
     
     Byte hob = (word>>8)&0x00FF;
-    Byte lob = word&0xFF00;
+    Byte lob = word&0xFF00; //TODO: I believe this is the wrong bitmask
     
     this->memory[location-MEM_OFFSET]=hob;
     this->memory[location-MEM_OFFSET+1]=lob;
