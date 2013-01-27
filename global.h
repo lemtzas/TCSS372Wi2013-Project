@@ -10,6 +10,9 @@
 
 typedef unsigned short Word;
 typedef unsigned char Byte;
+typedef unsigned char Boolean;
+#define FALSE 0
+#define TRUE 0
 
 
 #endif	/* GLOBAL_H */

@@ -11,10 +11,10 @@ char* _alu_update_SW(ALU* this)
     if(!this->R) 
         (*(this->SW)) |= 0x4000;
     //[C] set carry bit (detects unsigned overflow)
-    if( ((unsigned int)this->A+(unsigned int)this->B) > (this->result) )
+    if( ((unsigned int)this->A+(unsigned int)this->B) > (this->R) )
         (*(this->SW)) |= 0x2000;
     //[O] set overflow bit (detects sign overflow)
-    if( ((short)this->(short)A+this->B) < ((short)this->result) )
+    if( ((short)this->A+(short)this->B) < ((short)this->R) )
         (*(this->SW)) |= 0x1000;
 }
 
@@ -123,9 +123,9 @@ char* alu_op_mul(ALU* this)
     if(!this->a_set)    return "[alu_op_mul] Must set A!";
     if(!this->b_set)    return "[alu_op_mul] Must set B!";
     if(!this->r_set)    return "[alu_op_mul] Must reset Operands!";
-    err = register_getLOB(this->a_set,a_lob);
+    err = reg_getLOB(&(this->a_set),&a_lob);
     if(err) return err;
-    err = register_getLOB(this->b_set,b_lob);
+    err = reg_getLOB(&(this->b_set),&b_lob);
     if(err) return err;
     this->R = a_lob * b_lob;
     this->r_set = TRUE;

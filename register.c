@@ -2,6 +2,7 @@
 
 char* reg_init(Register *this)
 {
+    (*this) = 0;
     return 0;
 }
 /**Set Low Order Byte.*/
