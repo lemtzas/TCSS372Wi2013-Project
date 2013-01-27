@@ -1,6 +1,8 @@
 #include "alu.h"
 
 //TODO: Please review this for accuracy
+//TODO: Overflow and Carry is only possible during ADD and SUB. Move it there
+//TODO: Rename to represent altered functionality.
 char* _alu_update_SW(ALU* this)
 {
     //clear NZCO
