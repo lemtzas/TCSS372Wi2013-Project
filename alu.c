@@ -96,7 +96,7 @@ char* alu_op_add(ALU* this)
     if(!this)           return "[alu_op_add] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_add] Must set A!";
     if(!this->b_set)    return "[alu_op_add] Must set B!";
-    if(!this->r_set)    return "[alu_op_add] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_add] Must reset Operands!";
     this->R = this->A + this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -109,7 +109,7 @@ char* alu_op_sub(ALU* this)
     if(!this)           return "[alu_op_sub] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_sub] Must set A!";
     if(!this->b_set)    return "[alu_op_sub] Must set B!";
-    if(!this->r_set)    return "[alu_op_sub] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_sub] Must reset Operands!";
     this->R = this->A - this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -124,7 +124,7 @@ char* alu_op_mul(ALU* this)
     if(!this)           return "[alu_op_mul] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_mul] Must set A!";
     if(!this->b_set)    return "[alu_op_mul] Must set B!";
-    if(!this->r_set)    return "[alu_op_mul] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_mul] Must reset Operands!";
     err = reg_getLOB(&(this->a_set),&a_lob);
     if(err) return err;
     err = reg_getLOB(&(this->b_set),&b_lob);
@@ -141,7 +141,7 @@ char* alu_op_div(ALU* this)
     if(!this)           return "[alu_op_div] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_div] Must set A!";
     if(!this->b_set)    return "[alu_op_div] Must set B!";
-    if(!this->r_set)    return "[alu_op_div] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_div] Must reset Operands!";
     this->R = this->A / this->B;
     this->R2 = this->A % this->B;
     this->r_set = TRUE;
@@ -156,7 +156,7 @@ char* alu_op_and(ALU* this)
     if(!this)           return "[alu_op_and] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_and] Must set A!";
     if(!this->b_set)    return "[alu_op_and] Must set B!";
-    if(!this->r_set)    return "[alu_op_and] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_and] Must reset Operands!";
     this->R = this->A & this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -169,7 +169,7 @@ char* alu_op_or(ALU* this)
     if(!this)           return "[alu_op_or] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_or] Must set A!";
     if(!this->b_set)    return "[alu_op_or] Must set B!";
-    if(!this->r_set)    return "[alu_op_or] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_or] Must reset Operands!";
     this->R = this->A | this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -182,7 +182,7 @@ char* alu_op_xor(ALU* this)
     if(!this)           return "[alu_op_xor] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_xor] Must set A!";
     if(!this->b_set)    return "[alu_op_xor] Must set B!";
-    if(!this->r_set)    return "[alu_op_xor] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_xor] Must reset Operands!";
     this->R = this->A ^ this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -194,7 +194,7 @@ char* alu_op_not(ALU* this)
 {
     if(!this)           return "[alu_op_not] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_not] Must set A!";
-    if(!this->r_set)    return "[alu_op_not] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_not] Must reset Operands!";
     this->R = ~this->A;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -206,7 +206,7 @@ char* alu_op_shl(ALU* this)
 {
     if(!this)           return "[alu_op_not] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_not] Must set A!";
-    if(!this->r_set)    return "[alu_op_not] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_not] Must reset Operands!";
     this->R = this->A << 1;
     this->r_set = TRUE;
     this->a_set = FALSE;
@@ -218,10 +218,31 @@ char* alu_op_shr(ALU* this)
 {
     if(!this)           return "[alu_op_not] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_not] Must set A!";
-    if(!this->r_set)    return "[alu_op_not] Must reset Operands!";
+    if(this->r_set)    return "[alu_op_not] Must reset Operands!";
     this->R = this->A >> 1;
     this->a_set = FALSE;
     this->b_set = FALSE;
     this->r_set = TRUE;
     return 0;
 }
+
+
+//void main(int argc, char** argv)
+//{
+//    ALU alu;
+//    ALU sw;
+//    Register r0;
+//    Register a,b;
+//    char* err;
+//    
+//    err = alu_init(&alu,&sw);
+//    if(err) printf("%s\n",err);
+//    err = alu_set_rs(&alu,0x0001,0x0002);
+//    if(err) printf("%s\n",err);
+//    err = alu_op_add(&alu);
+//    if(err) printf("%s\n",err);
+//    err = alu_get_res(&alu,&r0);
+//    if(err) printf("%s\n",err);
+//    printf("%04x",r0);
+//    return 0;
+//}
