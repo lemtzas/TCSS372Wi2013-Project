@@ -1,3 +1,8 @@
+/*
+ * File: register.c
+ * Group: Dai-Gurran
+ * Author:
+ */
 #include "register.h"
 
 char* reg_init(Register *this)

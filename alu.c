@@ -1,3 +1,8 @@
+/*
+ * File: alu.c
+ * Group: Dai-Gurran
+ * Author:
+ */
 #include "alu.h"
 
 //TODO: Please review this for accuracy
@@ -227,22 +232,22 @@ char* alu_op_shr(ALU* this)
 }
 
 
-void main(int argc, char** argv)
-{
-    ALU alu;
-    ALU sw;
-    Register r0;
-    Register a,b;
-    char* err;
-    
-    err = alu_init(&alu,&sw);
-    if(err) printf("%s\n",err);
-    err = alu_set_rs(&alu,0x0057,0x0004);
-    if(err) printf("%s\n",err);
-    err = alu_op_mul(&alu);
-    if(err) printf("%s\n",err);
-    err = alu_get_res(&alu,&r0);
-    if(err) printf("%s\n",err);
-    printf("%04x",r0);
-    return 0;
-}
+//void main(int argc, char** argv)
+//{
+//    ALU alu;
+//    ALU sw;
+//    Register r0;
+//    Register a,b;
+//    char* err;
+//    
+//    err = alu_init(&alu,&sw);
+//    if(err) printf("%s\n",err);
+//    err = alu_set_rs(&alu,0x0057,0x0004);
+//    if(err) printf("%s\n",err);
+//    err = alu_op_mul(&alu);
+//    if(err) printf("%s\n",err);
+//    err = alu_get_res(&alu,&r0);
+//    if(err) printf("%s\n",err);
+//    printf("%04x",r0);
+//    return 0;
+//}
