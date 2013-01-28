@@ -125,11 +125,11 @@ char* alu_op_mul(ALU* this)
     if(!this->a_set)    return "[alu_op_mul] Must set A!";
     if(!this->b_set)    return "[alu_op_mul] Must set B!";
     if(this->r_set)    return "[alu_op_mul] Must reset Operands!";
-    err = reg_getLOB(&(this->a_set),&a_lob);
+    err = reg_getLOB(&(this->A),&a_lob);
     if(err) return err;
-    err = reg_getLOB(&(this->b_set),&b_lob);
+    err = reg_getLOB(&(this->B),&b_lob);
     if(err) return err;
-    this->R = a_lob * b_lob;
+    this->R = (unsigned short)a_lob * (unsigned short)b_lob;
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
@@ -227,22 +227,22 @@ char* alu_op_shr(ALU* this)
 }
 
 
-//void main(int argc, char** argv)
-//{
-//    ALU alu;
-//    ALU sw;
-//    Register r0;
-//    Register a,b;
-//    char* err;
-//    
-//    err = alu_init(&alu,&sw);
-//    if(err) printf("%s\n",err);
-//    err = alu_set_rs(&alu,0x0001,0x0002);
-//    if(err) printf("%s\n",err);
-//    err = alu_op_add(&alu);
-//    if(err) printf("%s\n",err);
-//    err = alu_get_res(&alu,&r0);
-//    if(err) printf("%s\n",err);
-//    printf("%04x",r0);
-//    return 0;
-//}
+void main(int argc, char** argv)
+{
+    ALU alu;
+    ALU sw;
+    Register r0;
+    Register a,b;
+    char* err;
+    
+    err = alu_init(&alu,&sw);
+    if(err) printf("%s\n",err);
+    err = alu_set_rs(&alu,0x0057,0x0004);
+    if(err) printf("%s\n",err);
+    err = alu_op_mul(&alu);
+    if(err) printf("%s\n",err);
+    err = alu_get_res(&alu,&r0);
+    if(err) printf("%s\n",err);
+    printf("%04x",r0);
+    return 0;
+}
