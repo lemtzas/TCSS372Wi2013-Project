@@ -1,7 +1,7 @@
 /* 
  * File: phase1test.c
  * Group: Dai-Gurren
- * Author: Lemtzas, Lawrence Grass
+ * Author: David Sharer, Lawrence Grass
  *
  * Created on January 21, 2013, 1:12 PM
  */

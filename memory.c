@@ -1,4 +1,7 @@
-
+/*
+ * Group: Dai-Gurren
+ * Author: David Sharer, Lawrence Grass
+ */
 #include "memory.h"
 #include "global.h"
 

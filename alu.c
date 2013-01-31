@@ -1,7 +1,7 @@
 /*
  * File: alu.c
  * Group: Dai-Gurran
- * Author:
+ * Author: David Sharer, Lawrence Grass
  */
 #include "alu.h"
 

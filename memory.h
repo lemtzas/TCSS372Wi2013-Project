@@ -1,7 +1,7 @@
 /* 
  * File:   memory.h
  * Group: Dai-Gurran
- * Author: Lemtzas, Lawrence Grass
+ * Author: David Sharer, Lawrence Grass
  *
  * Created on January 21, 2013, 1:17 PM
  */

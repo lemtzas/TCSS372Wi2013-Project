@@ -1,7 +1,7 @@
 /* 
  * File:   alu.h
  * Group: Dai-gurran
- * Author: Lemtzas
+ * Author: David Sharer, Lawrence Grass
  *
  * Created on January 21, 2013, 1:17 PM
  */
