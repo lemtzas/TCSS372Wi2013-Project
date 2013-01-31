@@ -13,12 +13,6 @@
 #include "registerFile.h"
 #include "alu.h"
 
-void printALL(RegisterFile *rf, Memory *memory, int start, ALU *alu, char* tag)
-{
-    printRFs(rf,tag);
-    printMem(memory,start,tag);
-    printALUSW(alu,tag);
-}
 void printRFs(RegisterFile *rf,char* tag)
 {
     //1. A print out of the initialized registers:
@@ -64,6 +58,13 @@ void printALUSW(ALU *alu, char* tag)
     printf("ALU.R: %04X\n",alu->R);
     printf("SW   : %04X\n",*(alu->SW));
     printf("-------------------------------------------\n");
+}
+
+void printALL(RegisterFile *rf, Memory *memory, int start, ALU *alu, char* tag)
+{
+    printRFs(rf,tag);
+    printMem(memory,start,tag);
+    printALUSW(alu,tag);
 }
 
 /*
