@@ -13,6 +13,7 @@
 //this gives 2^16 memory locations minus the 0x3000 offset
 #define MEM_SIZE 0xD000
 #define MEM_OFFSET 0x3000
+#define MEM_TOTAL 0x10000
 
 typedef struct {
     /**offset to MEM_OFFSET*/

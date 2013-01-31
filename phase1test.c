@@ -10,251 +10,192 @@
 #include <stdlib.h>
 #include "memory.h"
 #include "register.h"
+#include "registerFile.h"
 #include "alu.h"
+
+void printALL(RegisterFile *rf, Memory *memory, int start, ALU *alu, char* tag)
+{
+    printRFs(rf,tag);
+    printMem(memory,start,tag);
+    printALUSW(alu,tag);
+}
+void printRFs(RegisterFile *rf,char* tag)
+{
+    //1. A print out of the initialized registers:
+    printf("t1. A print out of the initialized registers:\n");
+    printf("-------------------------------------------\n");
+    
+    if(tag) printf("%s\n",tag);
+    int i = 0;
+    for(i=0 ; i<16; i++)
+    {
+        printf("R%01X: %04X\n",i,rf->registers[i]);
+    }
+    printf("-------------------------------------------\n");
+}
+
+void printMem(Memory *memory, int start,char* tag)
+{
+    printf("t2. A print out of the memory:\n");
+    printf("-------------------------------------\n");
+    if(tag) printf("%s\n",tag);
+    int i = 0;
+    Byte b1;
+    Byte b2;
+    for(i = 0; i < 16; i = i + 2)
+    {
+        if(i + start < MEM_TOTAL)
+        {
+            mem_getb(memory,start+i,&b1);
+            mem_getb(memory,start+i+1,&b2);
+            printf("%04X: %02X %02X\n",i+start,b1,b2);
+        }
+    }
+    printf("-------------------------------------------\n");
+}
+
+void printALUSW(ALU *alu, char* tag)
+{
+    printf("t3. A print out of the ALU and SW registers:\n");
+    printf("-------------------------------------------\n");
+    if(tag) printf("%s\n",tag);
+    printf("ALU.A: %04X\n",alu->A);
+    printf("ALU.B: %04X\n",alu->B);
+    printf("ALU.R: %04X\n",alu->R);
+    printf("SW   : %04X\n",*(alu->SW));
+    printf("-------------------------------------------\n");
+}
+
 /*
  * 
  */
 int main(int argc, char** argv) 
 {
-    //initialize components
-    int blah;
+    //housekeeping
+    char* err = 0;
+    int i = 0;
+    
+    ///initialize everything
+    //init memory
     Memory main_mem;
     mem_init(&main_mem);
-    char* err;
-    
-    ALU main_alu;
+    //init rfs
+    RegisterFile rf;
+    for(i=0 ; i<16; i++)
+        reg_init(&(rf.registers[i]));
+    //init SW
     Register SW;
     reg_init(&SW);
+    //init alu
+    ALU main_alu;
     alu_init(&main_alu, &SW);
     
-    Register R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, RA, RB, RC, RD, RE, RF;
-    reg_init(&R0);
-    reg_init(&R1);
-    reg_init(&R2);
-    reg_init(&R3);
-    reg_init(&R4);
-    reg_init(&R5);
-    reg_init(&R6);
-    reg_init(&R7);
-    reg_init(&R8);
-    reg_init(&R9);
-    reg_init(&RA);
-    reg_init(&RB);
-    reg_init(&RC);
-    reg_init(&RD);
-    reg_init(&RE);
-    reg_init(&RF);
+    ////display registers
+    //printALL(&rf,&main_mem,0x3000,&main_alu,"BEFORE");
+    //1. initialize register file to random values
+    printf("1. Initializing register file and main memory.\n");
+    printf("2. Printing out initial state of memory.\n");
     
-    printf("A print out of the initialized registers:\n");
-    printf("-------------------------------------------\n");
-    printf("R0: %04x\n",R0);
-    printf("R1: %04x\n",R1);
-    printf("R2: %04x\n",R2);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("R5: %04x\n",R5);
-    printf("R6: %04x\n",R6);
-    printf("R7: %04x\n",R7);
-    printf("R8: %04x\n",R8);
-    printf("R9: %04x\n",R9);
-    printf("RA: %04x\n",RA);
-    printf("RB: %04x\n",RB);
-    printf("RC: %04x\n",RC);
-    printf("RD: %04x\n",RD);
-    printf("RE: %04x\n",RE);
-    printf("RF: %04x\n",RF);
+    //2. initial printout
+    printALL(&rf,&main_mem,0x3000,&main_alu,"INITIAL PRINTOUT (2) ; BEFORE 3");
     
-    //Part 3
-    printf("Changing of some of the registers to computable values:\n");
+    //3. store specific values into six or more registers
+    i = 2;
+    rf.registers[++i]=0x0008; //R3
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
+    rf.registers[++i]=0x0010; //R4
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
+    rf.registers[++i]=0x1010; //R5
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
+    rf.registers[++i]=0x0002; //R6
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
+    rf.registers[++i]=0x0101; //R7
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
+    rf.registers[++i]=0x0100; //R8
+    printf("2. STORING %04X INTO $R%01X\n",rf.registers[i],i);
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("R5: %04x\n",R5);
-    printf("R6: %04x\n",R6);
-    printf("R7: %04x\n",R7);
-    printf("R8: %04x\n",R8);
-    R3=0x0008;
-    R4=0x0010;
-    R5=0x1010;
-    R6=0x0002;
-    R7=0x0101;
-    R8=0x0100;
-    printf("AFTER:\n");
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("R5: %04x\n",R5);
-    printf("R6: %04x\n",R6);
-    printf("R7: %04x\n",R7);
-    printf("R8: %04x\n",R8);
-    printf("\n");
+    printALL(&rf,&main_mem,0x3000,&main_alu,"AFTER 3 ; BEFORE 4");
     
-    //Part 4    
-    printf("Store the following values to memory starting at\n"
-           "location 0x3010: 0x7F, 0xFF, 0x00, 0x04, 0xFF,\n"
-           " 0xA2, 0x05, 0x7A:\n");
-    printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    Word i;
-    for(i=0x3010; i<0x3018;i++)
-    {
-        Byte temp;
-        mem_getb(&main_mem, i, &temp);
-        printf("0x%04x: 0x%02x\n",i,temp);
-    }
-    printf("AFTER:\n");
+    //4. Store the following values to memory starting at location 0x3010: 0x7F, 0xFF, 0x00, 0x04, 0xFF, 0xA2, 0x05, 0x7A.
     Byte bytes[] = {0x7F, 0xFF, 0x00, 0x04, 0xFF, 0xA2, 0x05, 0x7A};
-    int j = 0;
-    for(i=0x3010; i<0x3018;i++)
+    int start = 0x3010;
+    for(i=0;i<sizeof(bytes)/sizeof(Byte);i++)
     {
+        printf("4. STORING %02X IN MEM[%04X]\n",bytes[i],i+start);
         Byte temp;
-        mem_setb(&main_mem, i, bytes[j]);
-        mem_getb(&main_mem, i, &temp);
-        printf("0x%04x: 0x%02x\n",i,temp);
-        j++;
+        mem_setb(&main_mem, i+start, bytes[i]);
     }
-    printf("\n");
-     
-    //Part5
-    printf("Loading words from memory 0x3010-0x3017 into register R1-R4\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R1: %04x\n",R1);
-    printf("R2: %04x\n",R2);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("AFTER:\n");
-    mem_getw(&main_mem, 0x3010, &R1);
-    mem_getw(&main_mem, 0x3012, &R2);
-    mem_getw(&main_mem, 0x3014, &R3);
-    mem_getw(&main_mem, 0x3016, &R4);
-    printf("R1: %04x\n",R1);
-    printf("R2: %04x\n",R2);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("AFTER:\n");
-    printf("\n");
-     
-    //Part 6
-    printf("Add R1 and R2 \n");
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 4 ; BEFORE 5");
+    
+    /*5 Store the same data in $R1, $R2, $R3, and $R4 (two consecutive bytes in each, eg $R1 <- 0x7FFF)*/
+    for(i=0; i<8;i+=2)
+    {
+        mem_getw(&main_mem,i+start,&(rf.registers[(i/2)+1]));
+        printf("5. STORING %04X FROM MEM[%04X] TO $R%01X\n",(rf.registers[(i/2)+1]),i+start,(i/2)+1);
+    }
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R1: %04x\n",R1);
-    printf("R2: %04x\n",R2);
-    printf("AFTER:\n");
-    alu_set_rs(&main_alu, R1, R2);
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 5 ; BEFORE 6");
+    
+    /*6. Add $R1 and $R2*/
+    printf("6. ADDING $R1 AND $R2; STORING ALU.R INTO $R0\n");
+    printf("-------------------------------------------\n");
+    alu_set_rs(&main_alu, rf.registers[1], rf.registers[2]);
     err = alu_op_add(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    printf("R0: %04x\n",R0);
-    printf("R1: %04x\n",R1);
-    printf("R2: %04x\n",R2);
-    if(err) printf("%s", err);
-    printf("\n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 6 ; BEFORE 7");
     
-    //Part 7
-    printf("Multiply R4 by R2 \n");
+    /*7. Multiply $R4 by $R2 (i.e. 0x057A X 0x0004 - what should the answer be in ALU.R?)*/
+    printf("7. MULTIPLYING $R4 BY $R2; STORING ALU.R INTO $R0\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R4: %04x\n",R4);
-    printf("R2: %04x\n",R2);
-    printf("AFTER:\n");
-    alu_set_rs(&main_alu, R4, R2);
+    alu_set_rs(&main_alu, rf.registers[4], rf.registers[2]);
     err = alu_op_mul(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    //*NOTE, since alu_op_mul only uses the LOB our answer is correct
-    printf("R0: %04x\n",R0);
-    printf("R4: %04x\n",R4);
-    printf("R2: %04x\n",R2);
-    if(err) printf("%s", err);
-    printf("\n");
-    
-    //Part 8
-    printf("Subtract R4 from R3 \n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 7 ; BEFORE 8");
+
+    /*8. Subtract $R4 from $R3*/
+    printf("8. SUBTRACTING $R4 FROM $R3; STORING ALU.R INTO $R0\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("AFTER:\n");
-    alu_set_rs(&main_alu, R3, R4);
+    alu_set_rs(&main_alu, rf.registers[3], rf.registers[4]);
     err = alu_op_sub(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    if(err) printf("%s", err);
-    printf("\n");
-    
-    //Part 9
-    printf("Divide R4 by R2 \n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 8 ; BEFORE 9");
+
+    /*9. Divide $R4 by $R2 (don't forget the remainder)*/
+    printf("9. DIVIDING $R4 BY $R2; STORING ALU.R INTO $R0; REMAINDER IN $R8\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R4: %04x\n",R4);
-    printf("R2: %04x\n",R2);
-    printf("R8: %04x\n",R8);
-    printf("AFTER:\n");
-    alu_set_rs(&main_alu, R4, R2);
+    alu_set_rs(&main_alu, rf.registers[4], rf.registers[2]);
     err = alu_op_div(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    alu_get_res2(&main_alu, &R8);
-    printf("R0: %04x\n",R0);
-    printf("R4: %04x\n",R4);
-    printf("R2: %04x\n",R2);
-    printf("R8: %04x\n",R8);
-    if(err) printf("%s", err);
-    printf("\n");
-    
-    //Part 10
-    printf("XOR R3 and R4 \n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    alu_get_res2(&main_alu, &(rf.registers[8]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 9 ; BEFORE 10");
+
+    /*10. XOR $R3 and $R4*/
+    printf("10. $R0 <- $R3 XOR $R4\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    printf("AFTER:\n");
-    alu_set_rs(&main_alu, R3, R4);
+    alu_set_rs(&main_alu, rf.registers[3], rf.registers[4]);
     err = alu_op_xor(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    printf("R4: %04x\n",R4);
-    if(err) printf("%s", err);
-    printf("\n");
-    
-    //Part 11 <----- NOTE still need the carry info and i didn't verify the answer
-    printf("SHL R3 \n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 10 ; BEFORE 11");
+
+    /*11. SHL $R3 (what should the carry flag do?)*/
+    printf("11. SHL $R3; STORING ALU.R INTO $R0\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    alu_set_rx(&main_alu, R3);
+    alu_set_rx(&main_alu, rf.registers[3]);
     err = alu_op_shl(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    printf("AFTER:\n");
-    printf("R0: %04x\n",R0);
-    printf("R3: %04x\n",R3);
-    if(err) printf("%s", err);
-    printf("\n");
-    
-    //Part 12 <----- NOTE not sure how to repeat this 3 times or do the flag setting
-    printf("SHR R2 \n");
+    alu_get_res(&main_alu, &(rf.registers[0]));
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 11 ; BEFORE 12");
+
+    /*12. SHR $R2 3 times (what should the zero flag do?)*/
+    printf("12. SHR $R2 3 TIMES; STORING ALU.R INTO $R2\n");
     printf("-------------------------------------------\n");
-    printf("BEFORE:\n");
-    printf("R0: %04x\n",R0);
-    printf("R2: %04x\n",R2);
-    alu_set_rx(&main_alu, R2);
-    err = alu_op_shr(&main_alu);
-    alu_get_res(&main_alu, &R0);
-    printf("AFTER:\n");
-    printf("R0: %04x\n",R0);
-    printf("R2: %04x\n",R2);
-    if(err) printf("%s", err);
-    printf("\n");
+    for(i=0; i<3; i++)
+    {
+        alu_set_rx(&main_alu, rf.registers[2]);
+        err = alu_op_shr(&main_alu);
+        alu_get_res(&main_alu, &(rf.registers[2]));
+    }
+    printALL(&rf,&main_mem,0x300E,&main_alu,"AFTER 12");
     
-    return (EXIT_SUCCESS);  
-
+    return 0;
 }
-

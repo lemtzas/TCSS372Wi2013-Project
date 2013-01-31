@@ -10,18 +10,44 @@
 //TODO: Rename to represent altered functionality.
 char* _alu_update_SW(ALU* this)
 {
-    //clear NZCO
-    (*(this->SW)) &= 0x0FFF;
+    //clear NZ
+    (*(this->SW)) &= 0x3FFF;
     //[N] set negative bit
     (*(this->SW)) |= (0x8000 & this->R);
     //[Z] set zero bit
     if(!this->R) 
         (*(this->SW)) |= 0x4000;
-    //[C] set carry bit (detects unsigned overflow)
-    if( ((unsigned int)this->A+(unsigned int)this->B) > (this->R) )
+    
+    //NO
+//    //[C] set carry bit (detects unsigned overflow)
+//    if( ((unsigned int)this->A+(unsigned int)this->B) > (this->R) )
+//        (*(this->SW)) |= 0x2000;
+//    //[O] set overflow bit (detects sign overflow)
+//    if( ((short)this->A+(short)this->B) < ((short)this->R) )
+//        (*(this->SW)) |= 0x1000;
+}
+
+char* _alu_clear_SW_CO(ALU* this)
+{
+    //clear CO
+    (*(this->SW)) &= 0xCFFF;
+}
+
+char* _alu_update_SW_set_C(ALU* this, unsigned char carry )
+{
+    //clear C
+    (*(this->SW)) &= 0xDFFF;
+    //set C?
+    if(carry)
         (*(this->SW)) |= 0x2000;
-    //[O] set overflow bit (detects sign overflow)
-    if( ((short)this->A+(short)this->B) < ((short)this->R) )
+}
+
+char* _alu_update_SW_set_O(ALU* this, unsigned char overflow)
+{
+    //clear O
+    (*(this->SW)) &= 0xEFFF;
+    //set O?
+    if(overflow)
         (*(this->SW)) |= 0x1000;
 }
 
@@ -106,6 +132,27 @@ char* alu_op_add(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
+    //carry
+    if((this->A&0x8000) && (this->B&0x8000))
+        _alu_update_SW_set_C(this,1);
+    //overflow
+    if((this->A&0x8000) == (this->B&0x8000)) //possible overflow
+    {
+        //get the sign of operands
+        char sig = 0;
+        if(this->A&0x8000)
+            sig = 1;
+        //get the sign of result
+        char ressig = 0;
+        if (this->R&0x8000)
+            ressig = 1;
+        //if they aren't the same, OVERFLOWWWWWWWWWWWWWW FLCL
+        if( sig != ressig )
+            _alu_update_SW_set_O(this,1);
+    }
+    
     return 0;
 }
 
@@ -119,6 +166,26 @@ char* alu_op_sub(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
+    //carry
+    if((this->A&0x8000) && (this->B&0x8000))
+        _alu_update_SW_set_C(this,1);
+    //overflow
+    if((this->A&0x8000) != (this->B&0x8000)) //possible underflow
+    {
+        //get the sign of operands
+        char sig = 0;
+        if(this->A&0x8000)
+            sig = 1;
+        //get the sign of result
+        char ressig = 0;
+        if (this->R&0x8000)
+            ressig = 1;
+        //if they aren't the same, OVERFLOWWWWWWWWWWWWWW FLCL
+        if( sig != ressig )
+            _alu_update_SW_set_O(this,1);
+    }
     return 0;
 }
 
@@ -134,10 +201,14 @@ char* alu_op_mul(ALU* this)
     if(err) return err;
     err = reg_getLOB(&(this->B),&b_lob);
     if(err) return err;
-    this->R = (unsigned short)a_lob * (unsigned short)b_lob;
+    this->A = a_lob;
+    this->B = b_lob;
+    this->R = this->A * this->B;
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this); //The spec does not say to set these
     return 0;
 }
 
@@ -153,6 +224,8 @@ char* alu_op_div(ALU* this)
     this->r2_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this); //The spec does not say to set these
     return 0;
 }
 
@@ -166,6 +239,8 @@ char* alu_op_and(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
     return 0;
 }
 
@@ -179,6 +254,8 @@ char* alu_op_or(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
     return 0;
 }
 
@@ -192,6 +269,8 @@ char* alu_op_xor(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
     return 0;
 }
 /*One Operand Instructions*/
@@ -204,6 +283,8 @@ char* alu_op_not(ALU* this)
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
     return 0;
 }
 
@@ -212,10 +293,20 @@ char* alu_op_shl(ALU* this)
     if(!this)           return "[alu_op_not] Must provide ALU!";
     if(!this->a_set)    return "[alu_op_not] Must set A!";
     if(this->r_set)    return "[alu_op_not] Must reset Operands!";
+    
+    //store carry information
+    unsigned char carry = 0;
+    if(this->A&0x8000) carry = 1;
+    
     this->R = this->A << 1;
     this->r_set = TRUE;
     this->a_set = FALSE;
     this->b_set = FALSE;
+    
+    _alu_update_SW(this);
+    _alu_update_SW_set_O(this,0);
+    //shl must fill carry bit
+    _alu_update_SW_set_C(this,carry);
     return 0;
 }
 
@@ -228,6 +319,8 @@ char* alu_op_shr(ALU* this)
     this->a_set = FALSE;
     this->b_set = FALSE;
     this->r_set = TRUE;
+    _alu_update_SW(this);
+    _alu_clear_SW_CO(this);
     return 0;
 }
 
