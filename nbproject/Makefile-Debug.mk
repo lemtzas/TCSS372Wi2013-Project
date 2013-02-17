@@ -35,9 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/cpu.o \
+	${OBJECTDIR}/debug.o \
 	${OBJECTDIR}/register.o \
 	${OBJECTDIR}/alu.o \
 	${OBJECTDIR}/phase1test.o \
+	${OBJECTDIR}/phase2main.o \
 	${OBJECTDIR}/memory.o
 
 
@@ -65,6 +68,16 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tcss372wi2013-project.exe: ${OBJECTFI
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tcss372wi2013-project ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/cpu.o: cpu.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/cpu.o cpu.c
+
+${OBJECTDIR}/debug.o: debug.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug.o debug.c
+
 ${OBJECTDIR}/register.o: register.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -79,6 +92,11 @@ ${OBJECTDIR}/phase1test.o: phase1test.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase1test.o phase1test.c
+
+${OBJECTDIR}/phase2main.o: phase2main.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase2main.o phase2main.c
 
 ${OBJECTDIR}/memory.o: memory.c 
 	${MKDIR} -p ${OBJECTDIR}
