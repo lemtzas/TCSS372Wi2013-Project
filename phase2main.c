@@ -4,13 +4,8 @@
 #include "register.h"
 #include "registerFile.h"
 #include "alu.h"
+#include "cpu.h"
 #include "debug.h"
-
-//set the cursor location
-void _sl(int x, int y)
-{
-    printf("\033[%d;%dH",x,y);
-}
 
 //set the cursor color
 //go to http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
@@ -22,7 +17,7 @@ void _sl(int x, int y)
 
 int main(int argc, char** argv)
 {
-    printf("first line");
-    _sl(20,30);
-    printf("batman");
+    CPU cpu;
+    Memory memory;
+    return debug_entry(&cpu,&memory);
 }
