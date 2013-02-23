@@ -5,9 +5,35 @@ char* cpu_init(CPU *cpu) {
     return 0;
 }
 
+void cpu_inst_fetch(CPU *cpu) {
+    
+}
+
+//return 
+int cpu_inst_decode(CPU *cpu) {
+    
+}
+
+int cpu_inst_LDST(CPU *cpu) {
+    
+}
+
+int cpu_inst_ALU(CPU *cpu) {
+    
+}
+
 //step the "controller"
 char* cpu_step(CPU *cpu) {
-    //TODO: STATE TRANSITION; SHOULD WE DO THIS WITH MICROCODE OR?
+    //fetch -> decode
+    cpu_inst_fetch(cpu);
+    switch(cpu_inst_decode(cpu)) {
+       
+    }
+    //decode -> LD/ST, ALU, (BR/JSR, IO/MISC)
+        //LD/ST -> MOV, IMMED, ADDR, (mod)
+                //(mod) -> REG, BASE, INDEX, INDIRECT
+        //ALU -> EXECUTE (via alu, all have mod)
+    
     return 0;
 }
 
