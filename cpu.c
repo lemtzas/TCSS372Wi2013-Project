@@ -599,9 +599,9 @@ uint16_t sext(Word word, int bits) {
     return s;
 }
 
-int main() {
-    Word w = 0x01FF;
-    int bits = 8;
-    printf("sext(%04X, %d) -> %04X",(uint16_t)w,bits,(uint16_t)sext(w,bits));
-    return 0;
-}
+//int main() {
+//    Word w = 0x01FF;
+//    int bits = 8;
+//    printf("sext(%04X, %d) -> %04X",(uint16_t)w,bits,(uint16_t)sext(w,bits));
+//    return 0;
+//}
