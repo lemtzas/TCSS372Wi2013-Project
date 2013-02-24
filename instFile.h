@@ -8,9 +8,10 @@
 #ifndef INSTFILE_H
 #define	INSTFILE_H
 #include "global.h"
+#include "memory.h"
 #include <stdio.h>
 
-#define INST_SET_SIZE 100
+#define INST_SET_SIZE MEM_SIZE
 
 typedef struct {
     FILE *data;
@@ -34,6 +35,8 @@ int get_next_instruction(InstFile *this);
 
 /*Resets the index, so starts the instruction file over*/
 char* restart_inst_file(InstFile *this);
+
+char* inst_copy_to_memory(InstFile *this, Memory *memory);
 
 #endif	/* INSTFILE_H */
 
