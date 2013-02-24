@@ -36,10 +36,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/cpu.o \
-	${OBJECTDIR}/debug.o \
 	${OBJECTDIR}/register.o \
+	${OBJECTDIR}/debug.o \
 	${OBJECTDIR}/alu.o \
 	${OBJECTDIR}/phase1test.o \
+	${OBJECTDIR}/instFile.o \
 	${OBJECTDIR}/phase2main.o \
 	${OBJECTDIR}/memory.o
 
@@ -73,15 +74,15 @@ ${OBJECTDIR}/cpu.o: cpu.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/cpu.o cpu.c
 
-${OBJECTDIR}/debug.o: debug.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug.o debug.c
-
 ${OBJECTDIR}/register.o: register.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/register.o register.c
+
+${OBJECTDIR}/debug.o: debug.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug.o debug.c
 
 ${OBJECTDIR}/alu.o: alu.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -92,6 +93,11 @@ ${OBJECTDIR}/phase1test.o: phase1test.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase1test.o phase1test.c
+
+${OBJECTDIR}/instFile.o: instFile.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/instFile.o instFile.c
 
 ${OBJECTDIR}/phase2main.o: phase2main.c 
 	${MKDIR} -p ${OBJECTDIR}

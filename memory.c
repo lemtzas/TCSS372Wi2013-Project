@@ -18,7 +18,7 @@ char* mem_getw(Memory *this , unsigned int location , Word *word)
     //input validation
     if(!this) return "[mem_getw] *this not provided!";
     if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE) return "[mem_getw] location out of bounds.";
-    if(((location-MEM_OFFSET) % 2) != 0) return "[mem_getw] location not even";
+    //if(((location-MEM_OFFSET) % 2) != 0) return "[mem_getw] location not even";
     if(!word) return "[mem_getw] word requires a pointer!";
     
     Byte hob = this->memory[location-MEM_OFFSET]; //get the high order byte
@@ -37,7 +37,7 @@ char* mem_setw(Memory *this , unsigned int location , Word word)
     //input validation
     if(!this) return "[mem_setw] *this not provided!";
     if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE) return "[mem_setw] location out of bounds.";
-    if(((location-MEM_OFFSET) % 2) != 0) return "[mem_setw] location not even";
+    //if(((location-MEM_OFFSET) % 2) != 0) return "[mem_setw] location not even";
     if(!word) return "[mem_setw] word requires a pointer!";
     
     Byte hob = (word>>8)&0x00FF;

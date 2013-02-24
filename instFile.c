@@ -8,6 +8,7 @@ char* inst_file_init(InstFile *this){
     
     this->index = 1;
     this->currentInst = 0X0000;
+    this->instruction_count = 0;
     printf("size: %d\n", this->index);
     int i;
     for (i = 0; i < sizeof(this->instSet)/sizeof(this->instSet[0]); i++){
@@ -29,11 +30,14 @@ char* open_file(InstFile *this, char *textFile){
         while(fgets(line, 7, (this->data)) != NULL)//even though the line is only 4 
         {
             /* convert the string to a base 16 int */
-            sscanf (line, "%04X", &instruction);
-            /* add the int to the array of instructions*/
-            (this->instSet[i]) = instruction;
-//            printf("Instruction %d")
-            i++;
+            
+            //confirm read line
+            if( "Instruction %d",sscanf (line, "%04X", &instruction) > 0) {
+                (this->instSet[i]) = instruction;
+                /* add the int to the array of instructions*/
+                i++;
+                this->instruction_count++;
+            }
         }
         fclose((this->data));  /* closes the file*/
     }

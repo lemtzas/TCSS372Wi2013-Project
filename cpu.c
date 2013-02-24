@@ -394,7 +394,34 @@ char* cpu_inst_ALU_SHLR(CPU *cpu) {
 
 char* cpu_inst_CONTROL(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
-    
+    switch(ir->opcode.parts.op2) {
+        case OP2_BR_imm11:
+//            cpu->PC += 
+            break;
+        case OP2_BR_reg:
+            
+            break;
+        case OP2_BRnzco_imm9:
+            
+            break;
+        case OP2_BRnzco_reg:
+            
+            break;
+        case OP2_JSR_reg:
+            
+            break;
+        case OP2_JSR_nzco_reg:
+            
+            break;
+        case OP2_TRAP:
+            
+            break;
+        case OP2_RET:
+            
+            break;
+        default:
+            return "invalid opcode";
+    }
 }
 
 
@@ -449,5 +476,20 @@ char* cpu_run_limited(CPU *cpu, int limit) {
     }
     if(limit == 0)
         return "Limit Reached";
+    return 0;
+}
+
+
+uint16_t sext(Word word, int bits) {
+    int16_t s = word;
+    s = (s << (16-bits));
+    s = s >> (16-bits);
+    return s;
+}
+
+int main() {
+    Word w = 0x01FF;
+    int bits = 9;
+    printf("sext(%04X, %d) -> %04X",(uint16_t)w,bits,(uint16_t)sext(w,bits));
     return 0;
 }

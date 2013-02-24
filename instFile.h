@@ -17,6 +17,7 @@ typedef struct {
     int instSet[INST_SET_SIZE];
     int index;
     int currentInst;
+    int instruction_count;
 } InstFile;
 
 /*Initializes the ReadFile*/

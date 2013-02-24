@@ -8,11 +8,13 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 
-typedef unsigned short Word;
+typedef uint16_t Word;
 typedef unsigned char Byte;
 typedef unsigned char Boolean;
 #define FALSE 0
 #define TRUE  1
+
+#include <stdint.h>
 
 
 #endif	/* GLOBAL_H */

@@ -9,7 +9,7 @@
 #define	REGISTER_H
 #include "global.h"
 
-typedef unsigned short Register;
+typedef uint16_t Register;
 
 /**Initialize to 0.*/
 char* reg_init(Register *this);

@@ -15,9 +15,9 @@
 //    printf("\033[%d;%dm",x,y);
 //}
 
-int main(int argc, char** argv)
-{
-    CPU cpu;
-    Memory memory;
-    return debug_entry(&cpu,&memory);
-}
+//int main(int argc, char** argv)
+//{
+//    CPU cpu;
+//    Memory memory;
+//    return debug_entry(&cpu,&memory);
+//}
