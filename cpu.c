@@ -409,7 +409,7 @@ char* cpu_inst_SUPMISC(CPU *cpu) {
             return 0;
             break;
         default:
-            return "not implemented or invalid operation"
+            return "not implemented or invalid operation";
     }
 }
 
