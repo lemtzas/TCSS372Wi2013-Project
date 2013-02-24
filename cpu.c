@@ -396,34 +396,145 @@ char* cpu_inst_CONTROL(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
     switch(ir->opcode.parts.op2) {
         case OP2_BR_imm11:
-//            cpu->PC += 
+            return cpu_inst_CONTROL_BR_imm11(cpu);
             break;
         case OP2_BR_reg:
-            
+            return cpu_inst_CONTROL_BR_reg(cpu);
             break;
         case OP2_BRnzco_imm9:
-            
+            return cpu_inst_CONTROL_BRnzco_imm9(cpu);
             break;
         case OP2_BRnzco_reg:
-            
+            return cpu_inst_CONTROL_BRnzco_reg(cpu);
             break;
         case OP2_JSR_reg:
-            
+            return cpu_inst_CONTROL_JSR_reg(cpu);
             break;
         case OP2_JSR_nzco_reg:
-            
+            return cpu_inst_CONTROL_JSR_nzco_reg(cpu);
             break;
         case OP2_TRAP:
-            
+            return cpu_inst_CONTROL_TRAP(cpu);
             break;
         case OP2_RET:
-            
+            return cpu_inst_CONTROL_RET(cpu);
             break;
         default:
             return "invalid opcode";
     }
+    return 0;
 }
-
+char* cpu_inst_CONTROL_BR_imm11(CPU *cpu){
+    cpu_inst_format3* ir = (cpu_inst_format3*)(&(cpu->IR));
+    cpu->PC += sext(ir->immed11,11);
+    return 0;
+}
+char* cpu_inst_CONTROL_BR_reg(CPU *cpu){
+    cpu_inst_format1* ir = (cpu_inst_format1*)(&(cpu->IR));
+    cpu->PC = cpu->rf.registers[ir->d];
+    return 0;
+}
+char* cpu_inst_CONTROL_BRnzco_imm9(CPU *cpu){
+    cpu_inst_format4* ir = (cpu_inst_format4*)(&(cpu->IR));
+    Boolean jump = FALSE;
+    switch(ir->c) {
+        case MOD_CC_N:
+            if(cpu->SW.fields.N) jump = TRUE;
+            break;
+        case MOD_CC_Z:
+            if(cpu->SW.fields.Z) jump = TRUE;
+            break;
+        case MOD_CC_C:
+            if(cpu->SW.fields.C) jump = TRUE;
+            break;
+        case MOD_CC_O:
+            if(cpu->SW.fields.O) jump = TRUE;
+            break;
+        default:
+            return "invalid CC";
+    }
+    if(jump)
+        cpu->PC += sext(ir->immed9,9);
+    return 0;
+}
+char* cpu_inst_CONTROL_BRnzco_reg(CPU *cpu){
+    cpu_inst_format5* ir = (cpu_inst_format5*)(&(cpu->IR));
+    Boolean jump = FALSE;
+    switch(ir->c) {
+        case MOD_CC_N:
+            if(cpu->SW.fields.N) jump = TRUE;
+            break;
+        case MOD_CC_Z:
+            if(cpu->SW.fields.Z) jump = TRUE;
+            break;
+        case MOD_CC_C:
+            if(cpu->SW.fields.C) jump = TRUE;
+            break;
+        case MOD_CC_O:
+            if(cpu->SW.fields.O) jump = TRUE;
+            break;
+        default:
+            return "invalid CC";
+    }
+    if(jump)
+        cpu->PC = cpu->rf.registers[ir->r];
+    return 0;
+}
+char* cpu_inst_CONTROL_JSR_reg(CPU *cpu){
+    cpu_inst_format1* ir = (cpu_inst_format1*)(&(cpu->IR));
+    cpu->PC = cpu->rf.registers[ir->d];
+    
+    //PUSHW(PC)
+    cpu->rf.registers[REG_SP]-=2;
+    cpu->MAR = cpu->rf.registers[REG_SP];
+    cpu->MDR = cpu->PC;
+    char* err = cpu_setword(cpu); if(err) return err;
+    
+    return 0;
+}
+char* cpu_inst_CONTROL_JSR_nzco_reg(CPU *cpu){
+    cpu_inst_format5* ir = (cpu_inst_format5*)(&(cpu->IR));
+    Boolean jump = FALSE;
+    switch(ir->c) {
+        case MOD_CC_N:
+            if(cpu->SW.fields.N) jump = TRUE;
+            break;
+        case MOD_CC_Z:
+            if(cpu->SW.fields.Z) jump = TRUE;
+            break;
+        case MOD_CC_C:
+            if(cpu->SW.fields.C) jump = TRUE;
+            break;
+        case MOD_CC_O:
+            if(cpu->SW.fields.O) jump = TRUE;
+            break;
+        default:
+            return "invalid CC";
+    }
+    if(jump) {
+        cpu->PC = cpu->rf.registers[ir->r];
+    
+        //PUSHW(PC)
+        cpu->rf.registers[REG_SP]-=2;
+        cpu->MAR = cpu->rf.registers[REG_SP];
+        cpu->MDR = cpu->PC;
+        char* err = cpu_setword(cpu); if(err) return err;
+    }
+    return 0;
+}
+char* cpu_inst_CONTROL_TRAP(CPU *cpu){
+    return 0; //TODO: TRAP
+}
+char* cpu_inst_CONTROL_RET(CPU *cpu){
+    cpu_inst_format3* ir = (cpu_inst_format3*)(&(cpu->IR));
+    //TODO: RETI
+    //POPW -> PC
+    cpu->MAR = cpu->rf.registers[REG_SP];
+    cpu->rf.registers[REG_SP]+=2;
+    cpu_getword(cpu);
+    cpu->PC = cpu->MDR;
+    return 0;
+}
 
 char* cpu_inst_SUPMISC(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
@@ -438,6 +549,7 @@ char* cpu_inst_SUPMISC(CPU *cpu) {
         default:
             return "not implemented or invalid operation";
     }
+    return 0;
 }
 
 
@@ -489,7 +601,7 @@ uint16_t sext(Word word, int bits) {
 
 int main() {
     Word w = 0x01FF;
-    int bits = 9;
+    int bits = 8;
     printf("sext(%04X, %d) -> %04X",(uint16_t)w,bits,(uint16_t)sext(w,bits));
     return 0;
 }
