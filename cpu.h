@@ -86,7 +86,7 @@ typedef struct {
     Memory memory;
     
     //special registers
-    Register SW;
+    StatusWord SW;
     Register IR;
     Register PC;
     Register OSB;
@@ -101,7 +101,6 @@ typedef struct {
 char* cpu_init  (CPU *cpu);
 char* cpu_step  (CPU *cpu);
 char* cpu_run   (CPU *cpu);
-
 
 
 //remember to put fields in reverse
@@ -196,10 +195,6 @@ char* cpu_inst_fetch(CPU *cpu);
 char* cpu_inst_decode(CPU *cpu);
 
 char* cpu_inst_LDST(CPU *cpu);
-char* cpu_inst_ALU(CPU *cpu);
-char* cpu_inst_CONTROL(CPU *cpu);
-char* cpu_inst_SUPMISC(CPU *cpu);
-
 char* cpu_inst_LDST_LDI(CPU *cpu);
 char* cpu_inst_LDST_LDA(CPU *cpu);
 char* cpu_inst_LDST_LDB(CPU *cpu);
@@ -208,10 +203,23 @@ char* cpu_inst_LDST_STB(CPU *cpu);
 char* cpu_inst_LDST_STW(CPU *cpu);
 char* cpu_inst_LDST_STACK(CPU *cpu);
 
+char* cpu_inst_ALU(CPU *cpu);
 char* cpu_inst_ALU_OPER(CPU *cpu);
 char* cpu_inst_ALU_SHLR(CPU *cpu);
 
-int16_t sext(Word word, int bits);
+char* cpu_inst_CONTROL(CPU *cpu);
+char* cpu_inst_CONTROL_BR_imm11(CPU *cpu);
+char* cpu_inst_CONTROL_BR_reg(CPU *cpu);
+char* cpu_inst_CONTROL_BRnzco_imm9(CPU *cpu);
+char* cpu_inst_CONTROL_BRnzco_reg(CPU *cpu);
+char* cpu_inst_CONTROL_JSR_reg(CPU *cpu);
+char* cpu_inst_CONTROL_JSR_nzco_reg(CPU *cpu);
+char* cpu_inst_CONTROL_TRAP(CPU *cpu);
+char* cpu_inst_CONTROL_RET(CPU *cpu);
+
+char* cpu_inst_SUPMISC(CPU *cpu);
+
+Word sext(Word word, int bits);
 
 #endif	/* CPU_H */
 
