@@ -73,6 +73,7 @@ char* cpu_inst_LDST(CPU *cpu) {
         default:
             return "not implemented";
     }
+    return 0;
 }
 
 char* cpu_inst_LDST_LDI(CPU *cpu) {
@@ -259,8 +260,76 @@ char* cpu_inst_LDST_STW(CPU *cpu) {
 }
 
 char* cpu_inst_ALU(CPU *cpu) {
-    cpu_instruction = (cpu_instruction)(cpu->IR);
-    return cpu_instruction.opcode.parts.op2;
+    cpu_inst_format2 ir = (cpu_inst_format2)(cpu->IR);
+    switch(ir.opcode.parts.op2) {
+        case OP2_OPER:
+            return cpu_inst_ALU_OPER(cpu);
+            break;
+        case OP2_SHL:
+        case OP2_SHR:
+            return cpu_inst_ALU_SHLR(cpu);
+            break;
+        default:
+            return "not a valid opcode";
+    }
+    return 0;
+}
+
+char* cpu_inst_ALU_OPER(CPU *cpu) {
+    cpu_inst_format2 ir = (cpu_inst_format2)(cpu->IR);
+    char* err = 0;
+    ALU* alu = &(cpu->alu);
+    //set x and y
+    err = alu_set_rs(alu,cpu->rf.registers[ir.d],cpu->rf.registers[ir.a]);
+    if(err) return err;
+    switch(ir.mod) {
+        case MOD_OPER_ADD:
+            err = alu_op_add(alu); if(err) return err;
+            break;
+        case MOD_OPER_SUB:
+            err = alu_op_sub(alu); if(err) return err;
+            break;
+        case MOD_OPER_MUL:
+            err = alu_op_mul(alu); if(err) return err;
+            break;
+        case MOD_OPER_DIV:
+            err = alu_op_div(alu); if(err) return err;
+            err = alu_get_res2(alu,&(cpu->rf.registers[REG_RES2]));
+            if(err) return err;
+            break;
+        case MOD_OPER_AND:
+            err = alu_op_and(alu); if(err) return err;
+            break;
+        case MOD_OPER_OR:
+            err = alu_op_or(alu); if(err) return err;
+            break;
+        case MOD_OPER_XOR:
+            err = alu_op_xor(alu); if(err) return err;
+            break;
+        case MOD_OPER_NOT:
+            err = alu_op_not(alu); if(err) return err;
+            break;
+    }
+    err = alu_get_res(alu,&(cpu->rf.registers[REG_RES]));
+    return err;
+}
+
+char* cpu_inst_ALU_SHLR(CPU *cpu) {
+    cpu_inst_format2 ir = (cpu_inst_format2)(cpu->IR);
+    char* err = 0;
+    ALU* alu = &(cpu->alu);
+    //set x and y
+    err = alu_set_rx(alu,cpu->rf.registers[ir.d]);
+    switch(ir.opcode.parts.op2) {
+        case OP2_SHL:
+            err = alu_op_shl(alu); if(err) return err;
+            break;
+        case OP2_SHR:
+            err = alu_op_shr(alu); if(err) return err;
+            break;
+    }
+    err = alu_get_res(alu,&(cpu->rf.registers[REG_RES]));
+    return err;
 }
 
 //step the "controller"
