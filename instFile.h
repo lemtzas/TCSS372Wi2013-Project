@@ -10,12 +10,13 @@
 #include "global.h"
 #include "memory.h"
 #include <stdio.h>
+#include <stdint.h>
 
 #define INST_SET_SIZE MEM_SIZE
 
 typedef struct {
     FILE *data;
-    int instSet[INST_SET_SIZE];
+    uint16_t instSet[INST_SET_SIZE];
     int index;
     int currentInst;
     int instruction_count;

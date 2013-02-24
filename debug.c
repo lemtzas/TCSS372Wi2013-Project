@@ -27,6 +27,19 @@ void _bold(char on) {
         
 }
 
+void _err(char on) {
+    if(on)
+        printf("\033[%dm",31);
+    else
+        printf("\033[%dm",39);
+        
+}
+
+void _flush_input() {
+    char ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+}
+
 void _vert_bar(int x, int y, int h, char c)
 {
     int i;
@@ -70,7 +83,7 @@ char* _debug_display_regspecial(CPU *cpu, Memory *memory) {
     printf("Special");
     _bold(0);
     int y = REGSPECIAL_Y;
-    y+=2; _sl(REGSPECIAL_X , y); printf("SW: %04x",cpu->SW);
+    y+=2; _sl(REGSPECIAL_X , y); printf("SW: %04x",cpu->SW.full_data);
     y+=2; _sl(REGSPECIAL_X , y); printf("IR: %04x",cpu->IR);
     y+=2; _sl(REGSPECIAL_X , y); printf("PC: %04x",cpu->PC);
     //printf("OSB: %04x",cpu->OSB); y+=2;
@@ -119,15 +132,81 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     _sl(BOTTOM_X , BOTTOM_Y+1);
     printf("Command? ");
     _bold(0);
-    printf("1) load program, 2) run program, 3) step program, 4) dump memory");
+    printf("1) load program, 2) run program, 3) step program, 4) dump memory\n");
     
-    _bold(1);
-    printf("\n> ");
     int command;
-    scanf("%i",&command);
-    _bold(0);
+    _bold(1);
+    do {
+        _sl(BOTTOM_X , BOTTOM_Y+2);
+        printf("> ");
+        if(!scanf("%i",&command)) {
+            command = COMMAND_INVALID;
+            _flush_input();
+        }
     
+        switch(command) {
+            case COMMAND_LOAD:
+                debug_entry_LOAD(cpu,memory);
+                break;
+            case COMMAND_RUN:
+                debug_entry_RUN(cpu,memory);
+                break;
+            case COMMAND_STEP:
+                debug_entry_STEP(cpu,memory);
+                break;
+            case COMMAND_DUMP:
+                debug_entry_DUMP(cpu,memory);
+                break;
+            default:
+                _sl(BOTTOM_X , BOTTOM_Y+2);
+                _err(1);
+                printf("                                          Invalid Option!");
+                _err(0);
+                break;
+        }
+    } while (command != COMMAND_QUIT);
+    
+    _bold(0);
     printf("%i",command);
     
     return 0;
+}
+
+char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
+    InstFile file;
+    inst_file_init(&file);
+    open_file(&file, "testFile.txt");
+    char* filename;
+    int res = -1;
+    do {
+        _sl(BOTTOM_X+4 , BOTTOM_Y+3);
+        printf("File name? ");
+        if(!scanf("%s",filename)) {
+            _flush_input();
+            _sl(BOTTOM_X+4 , BOTTOM_Y+3);
+            _err(1);
+            printf("                                          Invalid Option!");
+            _err(0);
+            continue;
+        }
+        res = (int)open_file(&file,filename);
+        if(res == -1) {
+            _sl(BOTTOM_X+4 , BOTTOM_Y+3);
+            _err(1);
+            printf("                                          Could not open File!");
+            _err(0);
+        }
+    } while(res == -1);
+    _flush_input();
+    inst_copy_to_memory(&file,memory);
+    _debug_display_memory(cpu,memory);
+}
+char* debug_entry_RUN(CPU *cpu,Memory *memory) {
+    
+}
+char* debug_entry_STEP(CPU *cpu,Memory *memory) {
+    
+}
+char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
+    
 }
