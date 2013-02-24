@@ -38,10 +38,16 @@ char* cpu_inst_decode(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
     switch(ir->opcode.parts.op1) {
         case OP1_LDST:
-            cpu_inst_LDST(cpu);
+            return cpu_inst_LDST(cpu);
             break;
         case OP1_ALU:
-            cpu_inst_ALU(cpu);
+            return cpu_inst_ALU(cpu);
+            break;
+        case OP1_CONTROL:
+            return cpu_inst_CONTROL(cpu);
+            break;
+        case OP1_SUPMISC:
+            return cpu_inst_SUPMISC(cpu);
             break;
         default:
             return "not implemented";
@@ -79,7 +85,6 @@ char* cpu_inst_LDST(CPU *cpu) {
     }
     return 0;
 }
-
 char* cpu_inst_LDST_LDI(CPU *cpu) {
     cpu_inst_format1* ir = (cpu_inst_format1*)(&(cpu->IR));
     cpu->rf.registers [ir->d] = ir->immed7;
@@ -331,7 +336,6 @@ char* cpu_inst_ALU(CPU *cpu) {
     }
     return 0;
 }
-
 char* cpu_inst_ALU_OPER(CPU *cpu) {
     cpu_inst_format2* ir = (cpu_inst_format2*)(&(cpu->IR));
     char* err = 0;
@@ -370,7 +374,6 @@ char* cpu_inst_ALU_OPER(CPU *cpu) {
     err = alu_get_res(alu,&(cpu->rf.registers[REG_RES]));
     return err;
 }
-
 char* cpu_inst_ALU_SHLR(CPU *cpu) {
     cpu_inst_format2* ir = (cpu_inst_format2*)(&(cpu->IR));
     char* err = 0;
@@ -389,6 +392,28 @@ char* cpu_inst_ALU_SHLR(CPU *cpu) {
     return err;
 }
 
+char* cpu_inst_CONTROL(CPU *cpu) {
+    cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
+    
+}
+
+
+char* cpu_inst_SUPMISC(CPU *cpu) {
+    cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
+    switch(ir->opcode.parts.op2) {
+        case OP2_HALT:
+            cpu->halt = 1;
+            return 0;
+            break;
+        case OP2_NOP:
+            return 0;
+            break;
+        default:
+            return "not implemented or invalid operation"
+    }
+}
+
+
 //step the "controller"
 char* cpu_step(CPU *cpu) {
     char* err;
@@ -404,7 +429,6 @@ char* cpu_step(CPU *cpu) {
     
     return 0;
 }
-
 //step the "controller" until halt
 char* cpu_run(CPU *cpu) {
     char* err_buff;
@@ -415,7 +439,6 @@ char* cpu_run(CPU *cpu) {
     }
     return 0;
 }
-
 //step the "controller" until halt or instruction limit
 char* cpu_run_limited(CPU *cpu, int limit) {
     char* err_buff;
