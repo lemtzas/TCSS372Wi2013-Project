@@ -9,12 +9,12 @@ char* inst_file_init(InstFile *this){
     this->index = 1;
     this->currentInst = 0X0000;
     this->instruction_count = 0;
-    printf("size: %d\n", this->index);
+    //printf("size: %d\n", this->index);
     int i;
     for (i = 0; i < sizeof(this->instSet)/sizeof(this->instSet[0]); i++){
         this->instSet[i] = 0x0000;
     }
-    printf("size: %d\n", sizeof(this->instSet));  
+    //printf("size: %d\n", sizeof(this->instSet));  
     
     return 0;
 }
@@ -40,6 +40,8 @@ char* open_file(InstFile *this, char *textFile){
             }
         }
         fclose((this->data));  /* closes the file*/
+    } else {
+        return -1;
     }
     (this->currentInst) = (this->instSet[0]);
     return 0;
@@ -63,6 +65,14 @@ char* inc_next_instruction(InstFile *this){
 char* restart_inst_file(InstFile *this){
     this->index = 1;
     (this->currentInst) = (this->instSet[0]);
+    return 0;
+}
+
+char* inst_copy_to_memory(InstFile *this, Memory *memory) {
+    int i = 0;
+    for(i = 0; i < MEM_SIZE; i++) {
+        memory->memory[i] = this->instSet[i];
+    }
     return 0;
 }
 
