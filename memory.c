@@ -17,7 +17,8 @@ char* mem_getw(Memory *this , unsigned int location , Word *word)
 {
     //input validation
     if(!this) return "[mem_getw] *this not provided!";
-    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE) return "[mem_getw] location out of bounds.";
+    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE)
+        return errstr("[mem_getw] location out of bounds. (%04X)",location);
     //if(((location-MEM_OFFSET) % 2) != 0) return "[mem_getw] location not even";
     if(!word) return "[mem_getw] word requires a pointer!";
     
@@ -36,7 +37,8 @@ char* mem_setw(Memory *this , unsigned int location , Word word)
 {
     //input validation
     if(!this) return "[mem_setw] *this not provided!";
-    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE) return "[mem_setw] location out of bounds.";
+    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE)
+        return errstr("[mem_setw] location out of bounds. (%04X)",location);
     //if(((location-MEM_OFFSET) % 2) != 0) return "[mem_setw] location not even";
     if(!word) return "[mem_setw] word requires a pointer!";
     
@@ -53,7 +55,8 @@ char* mem_setw(Memory *this , unsigned int location , Word word)
 char* mem_getb(Memory *this , unsigned int location , Byte *byte)
 {
     if(!this) return "[mem_getb] *this not provided!";
-    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET >= MEM_SIZE) return "[mem_getb] location out of bounds.";
+    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET >= MEM_SIZE)
+        return errstr("[mem_getb] location out of bounds. (%04X)",location);
     if(!byte) return "[mem_getb] word requires a pointer!";
     
     *byte = this->memory[location-MEM_OFFSET]; //get the byte
@@ -64,7 +67,8 @@ char* mem_getb(Memory *this , unsigned int location , Byte *byte)
 char* mem_setb(Memory *this , unsigned int location , Byte byte)
 {
     if(!this) return "[mem_setb] *this not provided!";
-    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET >= MEM_SIZE) return "[mem_setb] location out of bounds.";
+    if(location-MEM_OFFSET < 0 || location-MEM_OFFSET >= MEM_SIZE)
+        return errstr("[mem_setb] location out of bounds. (%04X)",location);
     if(!byte) return "[mem_setb] word requires a pointer!";
     
     this->memory[location-MEM_OFFSET] = byte; //get the byte
