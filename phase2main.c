@@ -21,8 +21,11 @@ int main(int argc, char** argv)
     CPU cpu;
     cpu_init(&cpu);
     char* err;
-    //err = debug_entry(&cpu,&(cpu.memory));
-    if(err)
+    err = debug_entry(&cpu,&(cpu.memory));
+    if(err) {
+        _bold(1);
+        _err(1);
         printf("ERROR: %s", err);
+    }
     return 1;
 }
