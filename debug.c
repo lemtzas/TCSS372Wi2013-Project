@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "debug.h"
 #include "memory.h"
 
@@ -175,31 +176,35 @@ char* debug_entry(CPU *cpu, Memory *memory) {
 char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
     InstFile file;
     inst_file_init(&file);
-    open_file(&file, "testFile.txt");
-    char* filename;
+//    open_file(&file, "testFile.txt");
+    char filename[13];
     int res = -1;
     do {
         _sl(BOTTOM_X+4 , BOTTOM_Y+3);
-        printf("File name? ");
-        if(!scanf("%s",filename)) {
-            _flush_input();
-            _sl(BOTTOM_X+4 , BOTTOM_Y+3);
+        fputs("File name? ", stdout);
+        if(!fgets(filename, sizeof filename, stdin)) {
+            _flush_input(); //flushes the buffer
+            _sl(BOTTOM_X+4 , BOTTOM_Y+3); //sets the cursor location
             _err(1);
             printf("                                          Invalid Option!");
             _err(0);
             continue;
         }
-        res = (int)open_file(&file,filename);
+        if(filename){
+                res = (int)open_file(&file, filename);
+        }
         if(res == -1) {
             _sl(BOTTOM_X+4 , BOTTOM_Y+3);
             _err(1);
-            printf("                                          Could not open File!");
+            printf("                            Cannot open file: %s,", filename);
             _err(0);
         }
     } while(res == -1);
     _flush_input();
     inst_copy_to_memory(&file,memory);
+    _sl(BOTTOM_X-4 , BOTTOM_Y-3);
     _debug_display_memory(cpu,memory);
+    
 }
 char* debug_entry_RUN(CPU *cpu,Memory *memory) {
     

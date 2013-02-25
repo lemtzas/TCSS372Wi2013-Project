@@ -1,0 +1,96 @@
+Then hand assemble another simple program to the hex format. Here is an example simple program:
+
+; simple.asm
+; written for the SC-2 computer
+
+                .ORIG   x3000
+                LDA     $R1, OPERAND1       ; use $R1 as a refernce address
+		//0001 0 000 1 000 0000 x0100
+		x1080 x0100
+                LDI     $R5, #2             ; needed to increment by word
+		0000 1 010 1 000 0010
+		x0A82
+                LDA     $R4, RESULT         ;
+		0001 0 010 0 000 0000 x0001
+		x1200 x0001
+                LDW     $R2, $R1            ; get the first operand -> R2
+		0010 0 001 0 000 1 000
+		x2108
+                ADD     $R1, $R5            ; increment pointer by 2
+		0100 1 000 1 010 1 000
+		x48A8
+                MOV     $R1, $R0            ; put the pointer back in R1
+		0010 0 000 1 000 0 100
+		x2084
+                LDW     $R3, $R1            ; get second operand   -> R3
+		0010 0 001 1 000 1 011
+		x218B
+                SUB     $R2, $R3            ; do the subtraction <- change op to test others
+		0100 1 001 0 001 1 001
+		x4919
+                LDA     $R1, FINAL ?
+		00010 0001 0000000 0000 0000
+                BRz     GOTZERO             ; check the flags and branch accordingly
+		1001 0 000 0001 01 01//set to 5 so it adds 5 to our PC
+		x9015
+                BRn     GOTNEG
+		1001 0 000 0001 11 00 //set to add 7 to the pc
+		x901C
+                BRc     GOTCARRY
+		1001 0 000 0010 01 10//set to add 9 to the pc
+		x9026
+                BRo     GOTOVER
+		1001 0 000 0010 11 11 //set to add 11 to the pc
+		x902F
+                BR      $R1                 ; branch absolute, register-relative mode
+		1000 1 000 1 000 0000
+		x8880
+GOTZERO         LDI     $R6, #0
+		0000 1 011 0 000 0000
+		x0B00
+                STW     $R6, $R4
+		0011 0 011 0 010 0 000
+		x3320
+                BR      $R1
+		1000 1 000 1 000 0000
+		x8880
+GOTNEG          LDI     $R6, #-1
+		0000 1 011 0 100 0001
+		x0B41
+                STW     $R6, $R4
+		0011 0 011 0 010 0 000
+		x3320
+                BR      $R1
+		1000 1 000 1 000 0000
+		x8880
+GOTCARRY        LDI     $R6, 0xFF //Can't do an LDI with a xFF to big.
+                STW     $R6, $R4
+		0011 0 011 0 010 0 000
+		x3320
+                BR      $R1
+		1000 1 000 1 000 0000
+		x8880
+GOTOVER         LDI     $R6, 0xFFF //Can't do this either! did he mean LDA?
+                STW     $R6, $R4
+		0011 0 011 0 010 0 000
+		x3320
+                BR      $R1
+		1000 1 000 1 000 0000
+		x8880
+                MOV     $R2, $R0            ; otherwise put result in register R2
+		0011 0 001 0 000 0 000
+		x3100
+                ADD     $R1, $R5            ; increment pointer
+		0100 1 000 1 010 1 000
+		x48A8
+                MOV     $R1, $R0            ; put incremented pointer in R1
+		0011 0 000 1 000 0 000
+		x3080
+                STW     $R2, $R1            ; if no flags set
+		0011 0 001 0 000 1 000
+		x3108
+FINAL           HALT
+OPERAND1        .DW     x0100               ; change these values to force flags to set
+OPERAND2        .DW     x00AB
+RESULT          .RW     1
+                .END

@@ -55,6 +55,7 @@ char* cpu_inst_decode(CPU *cpu) {
     }
 }
 
+
 //return 0-3
 char* cpu_inst_LDST(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
