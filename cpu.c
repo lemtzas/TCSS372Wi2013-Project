@@ -11,7 +11,7 @@ char* cpu_init(CPU *cpu) {
     cpu->MDR = MDR_START;
     cpu->OSB = OSB_START;
     cpu->TXB = TXB_START;
-    return 0;
+    return alu_init(&(cpu->alu), &(cpu->SW));
 }
 
 char* cpu_getword(CPU *cpu) {
@@ -44,7 +44,7 @@ char* cpu_inst_fetch(CPU *cpu) {
 //return 0-3
 char* cpu_inst_decode(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
-    switch(ir->opcode.parts.op1) {
+    switch(ir->op1) {
         case OP1_LDST:
             return cpu_inst_LDST(cpu);
             break;
@@ -67,7 +67,7 @@ char* cpu_inst_decode(CPU *cpu) {
 //return 0-3
 char* cpu_inst_LDST(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
-    switch(ir->opcode.parts.op2) {
+    switch(ir->op2) {
         case OP2_LDI:
             return cpu_inst_LDST_LDI(cpu);
             break;
@@ -332,7 +332,7 @@ char* cpu_inst_LDST_STACK(CPU *cpu) {
 
 char* cpu_inst_ALU(CPU *cpu) {
     cpu_inst_format2* ir = (cpu_inst_format2*)(&(cpu->IR));
-    switch(ir->opcode.parts.op2) {
+    switch(ir->op2) {
         case OP2_OPER:
             return cpu_inst_ALU_OPER(cpu);
             break;
@@ -389,7 +389,7 @@ char* cpu_inst_ALU_SHLR(CPU *cpu) {
     ALU* alu = &(cpu->alu);
     //set x and y
     err = alu_set_rx(alu,cpu->rf.registers[ir->d]);
-    switch(ir->opcode.parts.op2) {
+    switch(ir->op2) {
         case OP2_SHL:
             err = alu_op_shl(alu); if(err) return err;
             break;
@@ -403,7 +403,7 @@ char* cpu_inst_ALU_SHLR(CPU *cpu) {
 
 char* cpu_inst_CONTROL(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
-    switch(ir->opcode.parts.op2) {
+    switch(ir->op2) {
         case OP2_BR_imm11:
             return cpu_inst_CONTROL_BR_imm11(cpu);
             break;
@@ -547,7 +547,7 @@ char* cpu_inst_CONTROL_RET(CPU *cpu){
 
 char* cpu_inst_SUPMISC(CPU *cpu) {
     cpu_instruction* ir = (cpu_instruction*)(&(cpu->IR));
-    switch(ir->opcode.parts.op2) {
+    switch(ir->op2) {
         case OP2_HALT:
             cpu->halt = 1;
             return 0;
@@ -566,7 +566,8 @@ char* cpu_inst_SUPMISC(CPU *cpu) {
 char* cpu_step(CPU *cpu) {
     char* err;
     //fetch -> decode
-    err = cpu_inst_fetch(cpu); 
+    if(cpu->halt) return 0;
+    err = cpu_inst_fetch(cpu); if(err)return err;
     err = cpu_inst_decode(cpu); if(err)return err;
     //^this function calls appropriate next function
     
