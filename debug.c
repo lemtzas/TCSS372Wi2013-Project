@@ -246,7 +246,8 @@ char* debug_entry_RUN(CPU *cpu,Memory *memory) {
     return cpu_run(cpu);
 }
 char* debug_entry_STEP(CPU *cpu,Memory *memory) {
-    return cpu_step(cpu);
+    char* err =cpu_step(cpu); if(err) return err;
+    return _debug_display(cpu,memory);
 }
 char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
     //is this really needed?
