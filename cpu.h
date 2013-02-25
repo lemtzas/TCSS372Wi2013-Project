@@ -112,27 +112,18 @@ char* cpu_run   (CPU *cpu);
 
 
 //remember to put fields in reverse
-typedef struct {
-    unsigned char op2:3;
-    unsigned char op1:2;
-} cpu_op_code_parts;
-
-typedef union {
-    cpu_op_code_parts parts;
-    unsigned char full:5;
-} cpu_op_code ;
 
 //basic instruction
 typedef struct {
     uint16_t everything_else:11;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_instruction;
 
 //two word instruction
 typedef struct {
     uint16_t zeros:7;
     uint16_t d:4;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_formatw2;
 
 //two word instruction
@@ -144,57 +135,57 @@ typedef struct {
 typedef struct {
     uint16_t immed7:7;
     uint16_t d:4;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format1;
 
 typedef struct {
     uint16_t mod:3;
     uint16_t a:4;
     uint16_t d:4;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format2;
 
 typedef struct {
     uint16_t immed11:11;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format3;
 
 typedef struct {
     uint16_t c:2;
     uint16_t immed9:9;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format4;
 
 typedef struct {
     unsigned char c:2;
     unsigned char zeros:5;
     unsigned char r:4;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format5;
 
 typedef struct {
     uint16_t zeros:5;
     uint16_t v:6;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format6;
 
 typedef struct {
     uint16_t m:1;
     uint16_t zeros:9;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format7;
 
 typedef struct {
     uint16_t m:1;
     uint16_t p:6;
     uint16_t d:4;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format8;
 
 typedef struct {
     uint16_t mod:3;
     uint16_t q:8;
-    cpu_op_code opcode;
+    uint8_t op2:3;uint8_t op1:2;
 } cpu_inst_format9;
 
 
