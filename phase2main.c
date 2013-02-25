@@ -6,6 +6,7 @@
 #include "alu.h"
 #include "cpu.h"
 #include "debug.h"
+#include "global.h"
 
 //set the cursor color
 //go to http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
@@ -18,6 +19,10 @@
 int main(int argc, char** argv)
 {
     CPU cpu;
-    Memory memory;
-    return debug_entry(&cpu,&memory);
+    cpu_init(&cpu);
+    char* err;
+    //err = debug_entry(&cpu,&(cpu.memory));
+    if(err)
+        printf("ERROR: %s", err);
+    return 1;
 }

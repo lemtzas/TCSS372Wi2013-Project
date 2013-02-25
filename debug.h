@@ -12,6 +12,9 @@
 #include "register.h"
 #include "memory.h"
 
+#define POS_PREV_CHAR   '-'
+#define POS_CURR_CHAR   '<'
+
 #define COMMAND_INVALID -1
 #define COMMAND_QUIT    0
 #define COMMAND_LOAD    1

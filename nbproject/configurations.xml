@@ -24,6 +24,7 @@
       <itemPath>alu.c</itemPath>
       <itemPath>cpu.c</itemPath>
       <itemPath>debug.c</itemPath>
+      <itemPath>global.c</itemPath>
       <itemPath>instFile.c</itemPath>
       <itemPath>memory.c</itemPath>
       <itemPath>phase1test.c</itemPath>

@@ -95,19 +95,48 @@ char* _debug_display_regspecial(CPU *cpu, Memory *memory) {
     
     return 0;
 }
-
+Register pos_prev = PC_START;
 char* _debug_display_memory(CPU *cpu, Memory *memory) {
     _sl(MEMORY_X , MEMORY_Y);
+    Register pos_cur = cpu->PC;
+    
+    //calculate start/end positions
+    Register start = pos_cur - 0x20/2;
+    Register end = start + 0x20;
+    if(start < MEM_OFFSET ) {
+        start = MEM_OFFSET;
+        end = start + 0x20;
+    } else if (end > MEM_TOTAL) {
+        end = MEM_TOTAL;
+        start = MEM_TOTAL - 0x20;
+    }
+    
+    //print
     _bold(1);
     printf("Memory");
     _bold(0);
     int i;
     Byte b1,b2;
-    for(i=0;i<0x10;i++) {
-        _sl(MEMORY_X , MEMORY_Y+1+i);
-        mem_getb(memory,DEBUG_MEMORY_START+(2*i),&b1);
-        mem_getb(memory,DEBUG_MEMORY_START+(2*i)+1,&b2);
-        printf("%04X: %02X  %02X",DEBUG_MEMORY_START+(2*i),b1,b2);
+    char* err;
+    for(i=start;i<end;i+=2) {
+        _sl(MEMORY_X , MEMORY_Y+1+(i-start)/2);
+        err = mem_getb(memory,i,&b1); if(err) return err;
+        err = mem_getb(memory,i+1,&b2); if(err) return err;
+        if(i == pos_prev || i == pos_cur)
+            _bold(1);
+        printf("%04X: %02X  %02X",i,b1,b2);
+        if(i == pos_cur) {
+            _err(1);
+            printf("%c",POS_CURR_CHAR);
+            _err(0);
+            _bold(0);
+        }
+        if(i == pos_prev) {
+            _err(1);
+            printf("%c",POS_PREV_CHAR);
+            _err(0);
+            _bold(0);
+        }
     }
     
     _bold(1);
@@ -118,16 +147,18 @@ char* _debug_display_memory(CPU *cpu, Memory *memory) {
 }
 
 char* _debug_display(CPU *cpu, Memory *memory) {
-    _debug_display_regfile(cpu,memory);
-    _debug_display_regspecial(cpu,memory);
-    _debug_display_memory(cpu,memory);
-    return 0;
+    char* err;
+    err = _debug_display_regfile(cpu,memory); if(err) return err;
+    err = _debug_display_regspecial(cpu,memory); if(err) return err;
+    err = _debug_display_memory(cpu,memory);
+    return err;
 }
 
 char* debug_entry(CPU *cpu, Memory *memory) {
     if(!cpu) return "[debug_entry] cpu not defined!";
     if(!memory) return "[debug_entry] memory not defined!";
-    _debug_display(cpu,memory);
+    char* err;
+    err = _debug_display(cpu,memory); if(err) return err;
     _bold(1);
     _hor_bar(BOTTOM_X,BOTTOM_Y,50,'=');
     _sl(BOTTOM_X , BOTTOM_Y+1);
@@ -147,16 +178,16 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     
         switch(command) {
             case COMMAND_LOAD:
-                debug_entry_LOAD(cpu,memory);
+                err = debug_entry_LOAD(cpu,memory); if(err) return err;
                 break;
             case COMMAND_RUN:
-                debug_entry_RUN(cpu,memory);
+                err = debug_entry_RUN(cpu,memory); if(err) return err;
                 break;
             case COMMAND_STEP:
-                debug_entry_STEP(cpu,memory);
+                err = debug_entry_STEP(cpu,memory); if(err) return err;
                 break;
             case COMMAND_DUMP:
-                debug_entry_DUMP(cpu,memory);
+                err = debug_entry_DUMP(cpu,memory); if(err) return err;
                 break;
             default:
                 _sl(BOTTOM_X , BOTTOM_Y+2);
@@ -175,19 +206,22 @@ char* debug_entry(CPU *cpu, Memory *memory) {
 
 char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
     InstFile file;
-    inst_file_init(&file);
+    char* err;
+    err = inst_file_init(&file); if(err) return err;
 //    open_file(&file, "testFile.txt");
-    char filename[13];
+    char filename[256];
+    filename[0] = 0;
     int res = -1;
+    _flush_input(); //flushes the buffer
     do {
         _sl(BOTTOM_X+4 , BOTTOM_Y+3);
-        fputs("File name? ", stdout);
-        if(!fgets(filename, sizeof filename, stdin)) {
-            _flush_input(); //flushes the buffer
+        printf("File name? ");
+        if(!gets(filename)) {
             _sl(BOTTOM_X+4 , BOTTOM_Y+3); //sets the cursor location
             _err(1);
             printf("                                          Invalid Option!");
             _err(0);
+            _flush_input(); //flushes the buffer
             continue;
         }
         if(filename){
@@ -196,22 +230,24 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
         if(res == -1) {
             _sl(BOTTOM_X+4 , BOTTOM_Y+3);
             _err(1);
-            printf("                            Cannot open file: %s,", filename);
+            printf("                            Cannot open file: %s", filename);
             _err(0);
+        } else if(res > 0) {
+            return res;
         }
     } while(res == -1);
     _flush_input();
-    inst_copy_to_memory(&file,memory);
+    err = inst_copy_to_memory(&file,memory); if(err) return err;
     _sl(BOTTOM_X-4 , BOTTOM_Y-3);
-    _debug_display_memory(cpu,memory);
-    
+    err = _debug_display_memory(cpu,memory); if(err) return err;
+    return 0;
 }
 char* debug_entry_RUN(CPU *cpu,Memory *memory) {
-    
+    return cpu_run(cpu);
 }
 char* debug_entry_STEP(CPU *cpu,Memory *memory) {
-    
+    return cpu_step(cpu);
 }
 char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
-    
+    //is this really needed?
 }

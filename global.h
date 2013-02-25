@@ -30,6 +30,7 @@ typedef union {
 #define FALSE 0
 #define TRUE  1
 
+char* errstr( char* format, ...);
 
 #endif	/* GLOBAL_H */
 

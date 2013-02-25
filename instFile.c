@@ -71,7 +71,7 @@ char* restart_inst_file(InstFile *this){
 char* inst_copy_to_memory(InstFile *this, Memory *memory) {
     int i = 0;
     for(i = 0; i < MEM_SIZE; i+=2) {
-        mem_setw(memory,i,this->instSet[i/2]);
+        mem_setw(memory,i+MEM_OFFSET,this->instSet[i/2]);
     }
     return 0;
 }

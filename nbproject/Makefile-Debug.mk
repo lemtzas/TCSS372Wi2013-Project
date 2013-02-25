@@ -42,7 +42,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/phase1test.o \
 	${OBJECTDIR}/instFile.o \
 	${OBJECTDIR}/phase2main.o \
-	${OBJECTDIR}/memory.o
+	${OBJECTDIR}/memory.o \
+	${OBJECTDIR}/global.o
 
 
 # C Compiler Flags
@@ -108,6 +109,11 @@ ${OBJECTDIR}/memory.o: memory.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/memory.o memory.c
+
+${OBJECTDIR}/global.o: global.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/global.o global.c
 
 # Subprojects
 .build-subprojects:

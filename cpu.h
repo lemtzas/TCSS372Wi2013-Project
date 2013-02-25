@@ -13,6 +13,14 @@
 #include "register.h"
 #include "memory.h"
 
+#define IR_START        0x0000
+#define MAR_START       0x0000
+#define MDR_START       0x0000
+#define OSB_START       0x0000
+#define TXB_START       0x0000
+#define PC_START        0x3000
+#define SW_START        0x4000 //0b0100 0000 0000 0000 (Z)
+
 #define REG_BP          0xE
 #define REG_IP_0        0xC
 #define REG_IP_1        0xD

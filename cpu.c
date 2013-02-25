@@ -1,8 +1,16 @@
 #include "cpu.h"
+#include "global.h"
 
 char* cpu_init(CPU *cpu) {
-    cpu->halt = 0;
+    cpu->halt = FALSE;
     cpu->rf.registers[REG_SP] = SP_START;
+    cpu->IR = IR_START;
+    cpu->SW.full_data = SW_START;
+    cpu->PC = PC_START;
+    cpu->MAR = MAR_START;
+    cpu->MDR = MDR_START;
+    cpu->OSB = OSB_START;
+    cpu->TXB = TXB_START;
     return 0;
 }
 
