@@ -40,7 +40,6 @@ char* mem_setw(Memory *this , unsigned int location , Word word)
     if(location-MEM_OFFSET < 0 || location-MEM_OFFSET+1 >= MEM_SIZE)
         return errstr("[mem_setw] location out of bounds. (%04X)",location);
     //if(((location-MEM_OFFSET) % 2) != 0) return "[mem_setw] location not even";
-    if(!word) return "[mem_setw] word requires a pointer!";
     
     Byte hob = (word>>8)&0x00FF;
     Byte lob = word&0x00FF; //TODO: I believe this is the wrong bitmask
@@ -69,7 +68,6 @@ char* mem_setb(Memory *this , unsigned int location , Byte byte)
     if(!this) return "[mem_setb] *this not provided!";
     if(location-MEM_OFFSET < 0 || location-MEM_OFFSET >= MEM_SIZE)
         return errstr("[mem_setb] location out of bounds. (%04X)",location);
-    if(!byte) return "[mem_setb] word requires a pointer!";
     
     this->memory[location-MEM_OFFSET] = byte; //get the byte
     
