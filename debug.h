@@ -12,9 +12,11 @@
 #include "register.h"
 #include "memory.h"
 
+//marker characters
 #define POS_PREV_CHAR   '-'
 #define POS_CURR_CHAR   '<'
 
+//command ids
 #define COMMAND_INVALID -1
 #define COMMAND_QUIT    0
 #define COMMAND_LOAD    1
@@ -24,7 +26,10 @@
 
 #include "instFile.h"
 
+//external code wanting to enter "debug mode" should use this
 char* debug_entry(CPU *cpu,Memory *memory);
+
+//major commands
 char* debug_entry_LOAD(CPU *cpu,Memory *memory);
 char* debug_entry_RUN(CPU *cpu,Memory *memory);
 char* debug_entry_STEP(CPU *cpu,Memory *memory);
