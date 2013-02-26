@@ -17,7 +17,7 @@
  * Three Command Options, selected by entering the appropriate number
    * Load (1)
      * Allows you to enter the path of a file to load.
-     * The file must be in hex format, 4 digits to a line. (A7A7)
+     * The file must be in hex format, 4 digits to a line, consecutively placed (A7A7)
      * The program starts at x3000.
      * The file is loaded immediately and the display updated.
      * New files can be loaded without restarting.
