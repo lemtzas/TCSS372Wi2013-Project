@@ -28,7 +28,7 @@ char* debug_entry(CPU *cpu,Memory *memory);
 char* debug_entry_LOAD(CPU *cpu,Memory *memory);
 char* debug_entry_RUN(CPU *cpu,Memory *memory);
 char* debug_entry_STEP(CPU *cpu,Memory *memory);
-char* debug_entry_DUMP(CPU *cpu,Memory *memory);
+//char* debug_entry_DUMP(CPU *cpu,Memory *memory);
 
 
 #endif	/* DEBUG_H */

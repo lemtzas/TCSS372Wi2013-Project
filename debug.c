@@ -176,7 +176,7 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     _sl(BOTTOM_X , BOTTOM_Y+1);
     printf("Command? ");
     _bold(0);
-    printf("1) load program, 2) run program, 3) step program, 4) dump memory\n");
+    printf("1) load program, 2) run program, 3) step program\n");
     
     int command;
     _bold(1);
@@ -201,10 +201,10 @@ char* debug_entry(CPU *cpu, Memory *memory) {
                 err = debug_entry_STEP(cpu,memory); if(err) return err;
                 _cl(BOTTOM_Y+2);
                 break;
-            case COMMAND_DUMP:
-                err = debug_entry_DUMP(cpu,memory); if(err) return err;
-                _cl(BOTTOM_Y+2);
-                break;
+//            case COMMAND_DUMP:
+//                err = debug_entry_DUMP(cpu,memory); if(err) return err;
+//                _cl(BOTTOM_Y+2);
+//                break;
             default:
                 _sl(BOTTOM_X , BOTTOM_Y+2);
                 _err(1);
@@ -272,6 +272,6 @@ char* debug_entry_STEP(CPU *cpu,Memory *memory) {
     char* err =cpu_step(cpu); if(err) return err;
     return _debug_display(cpu,memory);
 }
-char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
-    //is this really needed?
-}
+//char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
+//    //is this really needed?
+//}
