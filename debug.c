@@ -185,7 +185,7 @@ char* debug_entry(CPU *cpu, Memory *memory) {
         printf("> ");
         if(!scanf("%i",&command)) {
             command = COMMAND_INVALID;
-            _flush_input();
+            fflush(stdin);
         }
     
         switch(command) {
