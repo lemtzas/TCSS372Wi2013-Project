@@ -71,9 +71,13 @@ STB	$R3, $R1		;M[BP + $Ra] ? ($Rs(lob))
 0010 1 001 1 000 1 001
 x2989
 
-STW	$R3, $R1		;M[BP + $Ra] ? ($Rs(hob));
-0011 0 001 1 000 1 001		 M[BP + $Ra + 1] ? ($Rs(lob))
-x3189
+LDA     $R3, x4000      	; use $R1 as a reference address
+0001 0 001 1 000 0000 
+x1180 x4000
+
+STW	$R1, $R1		;M[BP + $Ra] ? ($Rs(hob));
+0011 0 000 1 000 1 001		 M[BP + $Ra + 1] ? ($Rs(lob))
+x3089
 
 STB	&$R4,			;M[IP-1] ? ($Rs(lob)); IP-1 ? IP-1 + 1
 0010 1 010 0 000 0 010		 index mode, register 0xD
@@ -118,7 +122,7 @@ x4891
 
 MUL	$R1, $R2		;should be 100
 0100 1 000 1 001 0 010
-x4892
+x48923
 
 AND	$R3, R4			;hmm... 42?
 0100 1 001 1 010 0 100
@@ -145,21 +149,17 @@ SHR	$R2,			;back to 100
 0101 0 001 0 000 0 000
 x5100
 
-LDA     $R1, x3037      	;loads the line right after the BR into R1 (37)
+LDA     $R1, x305A      	;loads the line right after the BR into R1 (5A)
 0001 0 000 1 000 0000 
-x1080 x3037
+x1080 x305A
 
-BR				;PC ? ($R1)
+BR      $R1			;PC ? ($R1)
 1000 1 000 1000 0000
 x8880
 
 LDI     $R1, #10             	; Loads the number 10 into register 1
 0000 1 000 1 000 1010
 x088A
-
-BR				;PC ? (PC) + SEXT(immed11) - local branch
-1000 0 000 0000 0001
-x8001
 
 LDI     $R2, #11             	; Loads the number 11 into register 2
 0000 1 001 0 000 1011
@@ -171,8 +171,8 @@ x4891
 line 40
 
 BRn
-1001 0 000 0000 0100		;increment the PC i think
-x9004
+1001 0 000 0000 0000		;increment the PC i think
+x9000
 
 LDI     $R1, #0             	; Loads the number 0 into register 1
 0000 1 000 1 000 0000
@@ -183,8 +183,8 @@ ADD	$R1, $R1		;Z flag set
 x4888
 
 BRz				;again i think this should just keep trucking
-1001 0 000 0000 01 01
-x9005
+1001 0 000 0000 00 01
+x9001
 
 LDA     $R1, xFFFF      	;loads the line right after the BR into R1 (34)
 0001 0 000 1 000 0000 
@@ -195,21 +195,21 @@ ADD	$R1, $R1		;C and O flags set
 x4888
 
 BRc				;inc by 1 again
-1001 0 000 0000 01 10
-x9006
+1001 0 000 0000 00 10
+x9002
 
 ADD	$R1, $R1		;do it again so the flags are still set for O
 0100 1 000 1 000 1 000
 x4888
 
 BRc				;inc by 1 again
-1001 0 000 0000 01 11
-x9007
+1001 0 000 0000 00 11
+x9003
 line 50
 
-LDA     $R1, x3056      	;loads an address to jump to into R1
+LDA     $R1, x307E      	;loads an address to jump to into R1
 0001 0 000 1 000 0000 
-x1080 x3056
+x1080 x3078
 
 JSR	$R1,			;jsr to x3056
 1010 0 000 1 000 0000
