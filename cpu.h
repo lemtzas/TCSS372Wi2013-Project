@@ -108,7 +108,7 @@ typedef struct {
 
 char* cpu_init  (CPU *cpu);
 char* cpu_step  (CPU *cpu);
-char* cpu_run   (CPU *cpu);
+//char* cpu_run   (CPU *cpu);
 
 
 //remember to put fields in reverse

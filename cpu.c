@@ -579,15 +579,15 @@ char* cpu_step(CPU *cpu) {
     return 0;
 }
 //step the "controller" until halt
-char* cpu_run(CPU *cpu) {
-    char* err_buff;
-    while(!(cpu->halt)) {
-        err_buff = cpu_step(cpu);
-        if(err_buff)
-            return err_buff;
-    }
-    return 0;
-}
+//char* cpu_run(CPU *cpu) {
+//    char* err_buff;
+//    while(!(cpu->halt)) {
+//        err_buff = cpu_step(cpu);
+//        if(err_buff)
+//            return err_buff;
+//    }
+//    return 0;
+//}
 //step the "controller" until halt or instruction limit
 char* cpu_run_limited(CPU *cpu, int limit) {
     char* err_buff;

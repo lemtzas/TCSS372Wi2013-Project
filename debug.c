@@ -20,6 +20,13 @@ void _sl(int x, int y) {
     printf("\033[%d;%dH",y,x);
 }
 
+void _cl(int y) {
+    printf("\033[%d;%dH",y,0);
+    fflush(stdout);
+    printf("\033[K");
+    fflush(stdout);
+}
+
 void _bold(char on) {
     if(on)
         printf("\033[%dm",1);
@@ -155,6 +162,7 @@ char* _debug_display(CPU *cpu, Memory *memory) {
     err = _debug_display_regfile(cpu,memory); if(err) return err;
     err = _debug_display_regspecial(cpu,memory); if(err) return err;
     err = _debug_display_memory(cpu,memory);
+    fflush(stdout);
     return err;
 }
 
@@ -168,7 +176,7 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     _sl(BOTTOM_X , BOTTOM_Y+1);
     printf("Command? ");
     _bold(0);
-    printf("1) load program, 2) run program, 3) step program, 4) dump memory\n");
+    printf("1) load program, 2) run program, 3) step program\n");
     
     int command;
     _bold(1);
@@ -177,22 +185,26 @@ char* debug_entry(CPU *cpu, Memory *memory) {
         printf("> ");
         if(!scanf("%i",&command)) {
             command = COMMAND_INVALID;
-            _flush_input();
+            fflush(stdin);
         }
     
         switch(command) {
             case COMMAND_LOAD:
                 err = debug_entry_LOAD(cpu,memory); if(err) return err;
+                _cl(BOTTOM_Y+2);
                 break;
             case COMMAND_RUN:
                 err = debug_entry_RUN(cpu,memory); if(err) return err;
+                _cl(BOTTOM_Y+2);
                 break;
             case COMMAND_STEP:
                 err = debug_entry_STEP(cpu,memory); if(err) return err;
+                _cl(BOTTOM_Y+2);
                 break;
-            case COMMAND_DUMP:
-                err = debug_entry_DUMP(cpu,memory); if(err) return err;
-                break;
+//            case COMMAND_DUMP:
+//                err = debug_entry_DUMP(cpu,memory); if(err) return err;
+//                _cl(BOTTOM_Y+2);
+//                break;
             default:
                 _sl(BOTTOM_X , BOTTOM_Y+2);
                 _err(1);
@@ -216,43 +228,50 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
     char filename[256];
     filename[0] = 0;
     int res = -1;
-    _flush_input(); //flushes the buffer
+    fflush(stdin);
     do {
         _sl(BOTTOM_X+4 , BOTTOM_Y+3);
         printf("File name? ");
-        if(!gets(filename)) {
+        if(!scanf("%s",filename)) {
             _sl(BOTTOM_X+4 , BOTTOM_Y+3); //sets the cursor location
             _err(1);
             printf("                                          Invalid Option!");
             _err(0);
-            _flush_input(); //flushes the buffer
+            fflush(stdin);
             continue;
         }
         if(filename){
                 res = (int)open_file(&file, filename);
         }
         if(res == -1) {
-            _sl(BOTTOM_X+4 , BOTTOM_Y+3);
             _err(1);
-            printf("                            Cannot open file: %s", filename);
+            _sl(BOTTOM_X+4 , BOTTOM_Y+3);
+            printf("                            Cannot open file: %s\033[K", filename);
             _err(0);
         } else if(res > 0) {
             return res;
         }
     } while(res == -1);
-    _flush_input();
+    fflush(stdin);
     err = inst_copy_to_memory(&file,memory); if(err) return err;
-    _sl(BOTTOM_X-4 , BOTTOM_Y-3);
+    //_sl(BOTTOM_X+4 , BOTTOM_Y+3);
+    _cl(BOTTOM_Y+3);
     err = _debug_display_memory(cpu,memory); if(err) return err;
     return 0;
 }
 char* debug_entry_RUN(CPU *cpu,Memory *memory) {
-    return cpu_run(cpu);
+    char* err_buff;
+    while(!(cpu->halt)) {
+        err_buff = debug_entry_STEP(cpu,memory);
+        if(err_buff)
+            return err_buff;
+    }
+    return 0;
 }
 char* debug_entry_STEP(CPU *cpu,Memory *memory) {
     char* err =cpu_step(cpu); if(err) return err;
     return _debug_display(cpu,memory);
 }
-char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
-    //is this really needed?
-}
+//char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
+//    //is this really needed?
+//}
