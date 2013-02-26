@@ -252,6 +252,8 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
             return res;
         }
     } while((int)res == -1);
+    cpu_init(cpu);
+    mem_init(memory);
     fflush(stdin);
     err = inst_copy_to_memory(&file,memory); if(err) return err;
     //_sl(BOTTOM_X+4 , BOTTOM_Y+3);
