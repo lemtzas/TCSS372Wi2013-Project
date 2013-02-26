@@ -247,7 +247,13 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
     return 0;
 }
 char* debug_entry_RUN(CPU *cpu,Memory *memory) {
-    return cpu_run(cpu);
+    char* err_buff;
+    while(!(cpu->halt)) {
+        err_buff = debug_entry_STEP(cpu,memory);
+        if(err_buff)
+            return err_buff;
+    }
+    return 0;
 }
 char* debug_entry_STEP(CPU *cpu,Memory *memory) {
     char* err =cpu_step(cpu); if(err) return err;
