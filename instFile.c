@@ -41,7 +41,7 @@ char* open_file(InstFile *this, char *textFile){
         }
         fclose((this->data));  /* closes the file*/
     } else {
-        return -1;
+        return (char*)-1;
     }
     (this->currentInst) = (this->instSet[0]);
     return 0;
