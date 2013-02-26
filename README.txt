@@ -32,6 +32,7 @@
  * Load a file with the option Load (1)
  * Enter a valid filename.
    * The backspace key messes this up for some reason, as do arrows. If you use them you will have to restart.
+   * hex1.txt and daigurran_test.hex are provided for testing
  * Select Run (2) or Step (3), depending on how you wish the output to progress.
    * Repeat Step (3) as desired.
  * Register and Memory display will update.
