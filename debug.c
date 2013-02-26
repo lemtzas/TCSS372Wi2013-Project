@@ -124,16 +124,18 @@ char* _debug_display_memory(CPU *cpu, Memory *memory) {
         err = mem_getb(memory,i+1,&b2); if(err) return err;
         if(i == pos_prev || i == pos_cur)
             _bold(1);
-        printf("%04X: %02X  %02X",i,b1,b2);
+        printf("%04X: %02X  %02X  ",i,b1,b2);
+        printf("\033[%dD",2); //shift to left (spaces above are to erase)
+        if(i == pos_prev) {
+            _err(1);
+            printf(" %c",POS_PREV_CHAR);
+            _err(0);
+            _bold(0);
+            printf("\033[%dD",2); //shift 2 left
+        }
         if(i == pos_cur) {
             _err(1);
             printf("%c",POS_CURR_CHAR);
-            _err(0);
-            _bold(0);
-        }
-        if(i == pos_prev) {
-            _err(1);
-            printf("%c",POS_PREV_CHAR);
             _err(0);
             _bold(0);
         }
@@ -143,6 +145,8 @@ char* _debug_display_memory(CPU *cpu, Memory *memory) {
     _vert_bar(MEMORY_X+12+3,MEMORY_Y,0x11,'#');
     _vert_bar(MEMORY_X+12+4,MEMORY_Y,0x11,'#');
     _bold(0);
+    
+    pos_prev = pos_cur; //step previous position
     return 0;
 }
 
