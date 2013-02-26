@@ -46,10 +46,10 @@
    * MOV
    * STB (all)
    * STW (all)
-   * PUSHB
-   * PUSHW
-   * POPB
-   * POPW
+   * PUSHB -needs bugfixing?
+   * PUSHW -needs bugfixing?
+   * POPB -needs bugfixing?
+   * POPW -needs bugfixing?
  * ALU
    * ADD
    * SUB
@@ -63,8 +63,8 @@
    * SHR
  * CONTROL
    * BR (all)
-   * JSR (all)
-   * RET
+   * JSR (all) -needs bugfixing
+   * RET -needs bugfixing
  * SUP/MISC
    * HALT
    * NOP
@@ -74,5 +74,7 @@
 Procrastination was my worst enemy on this one, combined with having 2 other projects to work on at the same time.
 
 Other than that, I had some difficulty grappling with the ANSI Escape Codes to make a decent UI. I really should have started earlier and used nCurses.
+
+There was some difficulty with debugging last minute. PUSHW and POPW seemed to not work quite right, which also messed up JSR/RET
 
 ### Lawrence ###
