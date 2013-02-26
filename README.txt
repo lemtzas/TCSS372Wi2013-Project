@@ -17,7 +17,7 @@
  * Three Command Options, selected by entering the appropriate number
    * Load (1)
      * Allows you to enter the path of a file to load.
-     * The file must be in hex format, 4 digits to a line. (A7A7)
+     * The file must be in hex format, 4 digits to a line, consecutively placed (A7A7)
      * The program starts at x3000.
      * The file is loaded immediately and the display updated.
      * New files can be loaded without restarting.
@@ -32,6 +32,7 @@
  * Load a file with the option Load (1)
  * Enter a valid filename.
    * The backspace key messes this up for some reason, as do arrows. If you use them you will have to restart.
+   * hex1.txt and daigurran_test.hex are provided for testing
  * Select Run (2) or Step (3), depending on how you wish the output to progress.
    * Repeat Step (3) as desired.
  * Register and Memory display will update.
