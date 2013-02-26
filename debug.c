@@ -114,7 +114,7 @@ char* _debug_display_memory(CPU *cpu, Memory *memory) {
         start = MEM_OFFSET;
         end = start + 0x20;
     } else if (end > MEM_TOTAL) {
-        end = MEM_TOTAL;
+        end = (Register)MEM_TOTAL;
         start = MEM_TOTAL - 0x20;
     }
     
@@ -227,7 +227,7 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
 //    open_file(&file, "testFile.txt");
     char filename[256];
     filename[0] = 0;
-    int res = -1;
+    char* res = (char*)-1;
     fflush(stdin);
     do {
         _sl(BOTTOM_X+4 , BOTTOM_Y+3);
@@ -241,9 +241,9 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
             continue;
         }
         if(filename){
-                res = (int)open_file(&file, filename);
+                res = open_file(&file, filename);
         }
-        if(res == -1) {
+        if((int)res == -1) {
             _err(1);
             _sl(BOTTOM_X+4 , BOTTOM_Y+3);
             printf("                            Cannot open file: %s\033[K", filename);
@@ -251,7 +251,7 @@ char* debug_entry_LOAD(CPU *cpu,Memory *memory) {
         } else if(res > 0) {
             return res;
         }
-    } while(res == -1);
+    } while((int)res == -1);
     fflush(stdin);
     err = inst_copy_to_memory(&file,memory); if(err) return err;
     //_sl(BOTTOM_X+4 , BOTTOM_Y+3);
