@@ -75,6 +75,8 @@ Procrastination was my worst enemy on this one, combined with having 2 other pro
 
 Other than that, I had some difficulty grappling with the ANSI Escape Codes to make a decent UI. I really should have started earlier and used nCurses.
 
-There was some difficulty with debugging last minute. PUSHW and POPW seemed to not work quite right, which also messed up JSR/RET
-
 ### Lawrence ###
+Definitely putting this off hurt.  
+
+My biggest problem is my lack of C knowledge.  I wish i could have contributed more with the hours i spent on this project.
+ 
