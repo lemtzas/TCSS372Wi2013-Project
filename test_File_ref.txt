@@ -6,6 +6,14 @@ LDA     $R1, x3006      	; use $R1 as a reference address
 0001 0 000 1 000 0000 
 x1080 x3006
 
+LDA     $RD, x3200      	; use $R1 as a reference address
+0001 0 110 1 000 0000 
+x1680 x3200
+
+LDA     $RC, x3202      	; use $R1 as a reference address
+0001 0 110 0 000 0000 
+x1600 x3202
+
 LDB	$R2(lob), $R1		; Loads 10 into the lob of R2
 0001 1 001 0 000 1 000
 x1908
@@ -29,6 +37,14 @@ x1B02
 LDW	&$R7,			;$Rd(hob) ? M[IP-0]; IP-0 ? IP-0 + 1;
 0010 0 011 1 000 0 010           $Rd(lob) ? M[IP-0]; IP-0 ? IP-0 + 1
 x2382                            index, register 0xC
+
+LDA     $R1, x4000      	; use $R1 as a reference address
+0001 0 000 1 000 0000 
+x1080 x4000
+
+STW	$R1, $R1		;M[$Ra] ? ($Rs(hob)); M[$Ra + 1] ? ($Rs(lob))
+0011 0 000 1 000 1 000
+x3088
 
 LDB	$R2, @$R1		;$Rd(lob) ? M[M[$Ra]]
 0001 1 001 0 000 1 011		 indirect mode
