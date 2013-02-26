@@ -2,9 +2,9 @@ LDI     $R1, #10             	; Loads the number 10 into register 1
 0000 1 000 1 000 1010
 x088A
 
-LDA     $R1, x1010      	; use $R1 as a reference address
+LDA     $R1, x3006      	; use $R1 as a reference address
 0001 0 000 1 000 0000 
-x1080 x1010
+x1080 x3006
 
 LDB	$R2(lob), $R1		; Loads 10 into the lob of R2
 0001 1 001 0 000 1 000
