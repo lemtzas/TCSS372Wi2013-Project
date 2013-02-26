@@ -17,7 +17,7 @@ typedef struct {
     Register B;
     Register R;
     Register R2;
-    Register *SW;
+    StatusWord *SW;
     Boolean a_set; //Has the a operand been set since the last operation?
     Boolean b_set; //Has the b operand been set since the last operation?
     Boolean r_set; //Has the result been set since the last operation?
@@ -25,7 +25,7 @@ typedef struct {
 } ALU;
 
 /*Initializes the ALU.*/
-char* alu_init(ALU* this, Register* SW);
+char* alu_init(ALU* this, StatusWord* SW);
 /*Sets both operand registers.*/
 char* alu_set_rs(ALU* this, Register rx, Register ry);
 /*Sets rx operand register.*/
