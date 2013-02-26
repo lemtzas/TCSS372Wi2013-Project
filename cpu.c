@@ -109,7 +109,7 @@ char* cpu_inst_LDST_LDA(CPU *cpu) {
     //read mem
     char* err = cpu_getword(cpu);
     //store
-    cpu->rf.registers[ir->word1.d] = cpu->MDR;
+    cpu->rf.registers[ir->d] = cpu->MDR;
     return err;
 }
 char* cpu_inst_LDST_LDB(CPU *cpu) {
