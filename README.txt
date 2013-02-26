@@ -27,3 +27,51 @@
    * Run (2)
      * Steps through the fetch-decode-execute cycle until a HALT instruction is found, or until the program crashes due to an invalid instruction.
      * Displays are updated after each step of the fetch-decode-execute cycle.
+
+## Operation ##
+ * Load a file with the option Load (1)
+ * Enter a valid filename.
+   * The backspace key messes this up for some reason, as do arrows. If you use them you will have to restart.
+ * Select Run (2) or Step (3), depending on how you wish the output to progress.
+   * Repeat Step (3) as desired.
+ * Register and Memory display will update.
+
+## Implemented Instructions ##
+ * ST/LD
+   * LDI
+   * LDA
+   * LDB (all)
+   * LDW (all)
+   * MOV
+   * STB (all)
+   * STW (all)
+   * PUSHB
+   * PUSHW
+   * POPB
+   * POPW
+ * ALU
+   * ADD
+   * SUB
+   * MUL
+   * DIV
+   * AND
+   * OR
+   * XOR
+   * NOT
+   * SHL
+   * SHR
+ * CONTROL
+   * BR (all)
+   * JSR (all)
+   * RET
+ * SUP/MISC
+   * HALT
+   * NOP
+
+## Difficulties ##
+### David ###
+Procrastination was my worst enemy on this one, combined with having 2 other projects to work on at the same time.
+
+Other than that, I had some difficulty grappling with the ANSI Escape Codes to make a decent UI. I really should have started earlier and used nCurses.
+
+### Lawrence ###
