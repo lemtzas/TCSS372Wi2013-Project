@@ -155,6 +155,7 @@ char* _debug_display(CPU *cpu, Memory *memory) {
     err = _debug_display_regfile(cpu,memory); if(err) return err;
     err = _debug_display_regspecial(cpu,memory); if(err) return err;
     err = _debug_display_memory(cpu,memory);
+    fflush(stdout);
     return err;
 }
 

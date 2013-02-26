@@ -23,8 +23,8 @@ Then hand assemble another simple program to the hex format. Here is an example 
 		0010 0 000 1 000 0 100
 		x2084
                 LDW     $R3, $R1            ; get second operand   -> R3
-		0010 0 001 1 000 1 011
-		x218B
+		0010 0 001 1 000 1 011 //->000
+		x218B -> x2188
                 SUB     $R2, $R3            ; do the subtraction <- change op to test others
 		0100 1 001 0 001 1 001
 		x4919
