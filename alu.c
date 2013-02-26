@@ -11,12 +11,12 @@
 char* _alu_update_SW(ALU* this)
 {
     //clear NZ
-    (*(this->SW)) &= 0x3FFF;
+    (this->SW->full_data) &= 0x3FFF;
     //[N] set negative bit
-    (*(this->SW)) |= (0x8000 & this->R);
+    (this->SW->full_data) |= (0x8000 & this->R);
     //[Z] set zero bit
     if(!this->R) 
-        (*(this->SW)) |= 0x4000;
+        (this->SW->full_data) |= 0x4000;
     
     //NO
 //    //[C] set carry bit (detects unsigned overflow)
@@ -30,29 +30,29 @@ char* _alu_update_SW(ALU* this)
 char* _alu_clear_SW_CO(ALU* this)
 {
     //clear CO
-    (*(this->SW)) &= 0xCFFF;
+    (this->SW->full_data) &= 0xCFFF;
 }
 
 char* _alu_update_SW_set_C(ALU* this, unsigned char carry )
 {
     //clear C
-    (*(this->SW)) &= 0xDFFF;
+    (this->SW->full_data) &= 0xDFFF;
     //set C?
     if(carry)
-        (*(this->SW)) |= 0x2000;
+        (this->SW->full_data) |= 0x2000;
 }
 
 char* _alu_update_SW_set_O(ALU* this, unsigned char overflow)
 {
     //clear O
-    (*(this->SW)) &= 0xEFFF;
+    (this->SW->full_data) &= 0xEFFF;
     //set O?
     if(overflow)
-        (*(this->SW)) |= 0x1000;
+        (this->SW->full_data) |= 0x1000;
 }
 
 /*Initializes the ALU.*/
-char* alu_init(ALU* this, Register* SW)
+char* alu_init(ALU* this, StatusWord* SW)
 {
     //init all registers
     this->A = this->B = this->R = this->R2 = 0;
