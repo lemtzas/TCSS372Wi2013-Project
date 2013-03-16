@@ -162,6 +162,15 @@ char* _debug_display(CPU *cpu, Memory *memory) {
     err = _debug_display_regfile(cpu,memory); if(err) return err;
     err = _debug_display_regspecial(cpu,memory); if(err) return err;
     err = _debug_display_memory(cpu,memory);
+    
+    //UI
+    _hor_bar(BOTTOM_X,BOTTOM_Y,50,'=');
+    
+    _sl(BOTTOM_X , BOTTOM_Y+1);
+    printf("Command? ");
+    _bold(0);
+    printf("1) load program, 2) run program, 3) step program\n");
+    
     fflush(stdout);
     return err;
 }
@@ -172,11 +181,10 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     char* err;
     err = _debug_display(cpu,memory); if(err) return err;
     _bold(1);
-    _hor_bar(BOTTOM_X,BOTTOM_Y,50,'=');
-    _sl(BOTTOM_X , BOTTOM_Y+1);
-    printf("Command? ");
-    _bold(0);
-    printf("1) load program, 2) run program, 3) step program\n");
+    
+    //setup output location
+    _sl(BOTTOM_X, BOTTOM_Y+5);
+    printf("\033[s"); //save cursor position, for loading by CPU IN/OUT instructions
     
     int command;
     _bold(1);
