@@ -560,6 +560,9 @@ char* cpu_inst_SUPMISC(CPU *cpu) {
         case OP2_NOP:
             return 0;
             break;
+        case OP2_INOUT:
+            return cpu_inst_SUPMISC_INOUT(cpu);
+            break;
         default:
             return "not implemented or invalid operation";
     }
