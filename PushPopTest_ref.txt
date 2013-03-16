@@ -1,0 +1,27 @@
+LDI     $R1, #10             	; Loads the number 10 into register 1
+0000 1 000 1 000 1010
+x088A
+
+LDI     $R3, #20             	; Loads the number 20 into register 3
+0000 1 001 1 001 0100
+x0994
+
+PUSHB	$R1, 			;10 for the wiiiiiinnnn!
+0011 1 000 1 000 0 001
+x3881
+
+POPB	$R2, 			;
+0011 1 001 0 000 0 010
+x3902
+
+PUSHW	$R3,			;
+0011 1 001 1 000 0 011
+x3983
+
+POPW	$R4,			;
+0011 1 010 0 000 0 100
+x3A04
+
+HALT
+1101 0 000 0000 0000
+xD000

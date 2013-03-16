@@ -1,4 +1,4 @@
-# TCSS 372 Programming Project - Phase 2 #
+# TCSS 372 Programming Project - Phase 3 #
 ## Coders ##
  * Team Daigurren
    * David Sharer
@@ -29,45 +29,16 @@
      * Displays are updated after each step of the fetch-decode-execute cycle.
 
 ## Operation ##
- * Load a file with the option Load (1)
- * Enter a valid filename.
+ * Load with the option Load (1)
+ * Enter InOutTest.txt as the filename.
    * The backspace key messes this up for some reason, as do arrows. If you use them you will have to restart.
-   * hex1.txt and daigurran_test.hex are provided for testing
- * Select Run (2) or Step (3), depending on how you wish the output to progress.
-   * Repeat Step (3) as desired.
+ * Select Run (2)
  * Register and Memory display will update.
 
 ## Implemented Instructions ##
- * ST/LD
-   * LDI
-   * LDA
-   * LDB (all)
-   * LDW (all)
-   * MOV
-   * STB (all)
-   * STW (all)
-   * PUSHB -needs bugfixing?
-   * PUSHW -needs bugfixing?
-   * POPB -needs bugfixing?
-   * POPW -needs bugfixing?
- * ALU
-   * ADD
-   * SUB
-   * MUL
-   * DIV
-   * AND
-   * OR
-   * XOR
-   * NOT
-   * SHL
-   * SHR
- * CONTROL
-   * BR (all)
-   * JSR (all) -needs bugfixing
-   * RET -needs bugfixing
- * SUP/MISC
-   * HALT
-   * NOP
+ * I/O
+    * IN
+    * OUT
 
 ## Difficulties ##
 ### David ###
@@ -78,7 +49,8 @@ Other than that, I had some difficulty grappling with the ANSI Escape Codes to m
 There were some issues toward the end around PUSH and POP. We noticed them through JSR/RET. We were unable to fix them before the deadline, but will soon.
 
 ### Lawrence ###
-Definitely putting this off hurt.  
+A large amount of confusion on what exactly we were supposed to implement made it hard to get started. Once he sent the e-mail refining the tasks it got easier.
 
-My biggest problem is my lack of C knowledge.  I wish i could have contributed more with the hours i spent on this project.
+Also sickness made this one difficult to, David was sick the weekend before it was due and I was sick the day it was due.
+
  

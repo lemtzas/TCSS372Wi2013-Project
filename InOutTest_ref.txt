@@ -1,0 +1,52 @@
+GETINPUT	LDI		$R0, #0			; clear R0
+		IN		$R1. #38		; get status register
+		AND		$R1, $R2		; R2 = 0x0001 mask
+		BRz		GETINPUT		; go back and check again
+		IN		$R0, #3A		; get char from data register
+
+
+LDI     $R0, #0             	; Clear R0
+0000 1 000 0 000 0000
+x0800
+
+LDI     $R2, #1             	; Mask
+0000 1 001 0 000 0001
+x0901
+
+IN      $R1                     ;gets the status register into R1?
+1100 0 000 1 something?
+x????
+
+AND	$R1, R2			;check if 1 or 0
+0100 1 000 1 001 0 100
+x4894
+
+BRz				;not sure where we go?
+1001 0 000 0000 00 01
+x9001
+
+IN       $R0                    ;actually goes and gets the char and puts it in R0?
+1100 0 000 0 something?
+????
+
+SENDOUTPUT	IN		$R1, #30		; get video status register - bit 0 is clear to send
+		AND		$R1, $R2		; check clear to send bit, 0 means it is clear
+		BRp		SENDOUTPUT		; 1 & 1 = 1 so not clear
+		OUT		$R0, #32		; send data to data register for printing
+
+IN      $R1                     ;gets the status register into R1?
+1100 0 000 1 something?
+x????
+
+AND	$R1, R2			;check if 1 or 0?
+0100 1 000 1 001 0 100
+x4894
+
+WHAT?! no BRp?!
+1001 0...
+x????
+
+OUT     $R0, something          ;send data to the register for printing
+1100 0 something...
+x????
+
