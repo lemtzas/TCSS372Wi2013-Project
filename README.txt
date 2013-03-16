@@ -75,6 +75,8 @@ Procrastination was my worst enemy on this one, combined with having 2 other pro
 
 Other than that, I had some difficulty grappling with the ANSI Escape Codes to make a decent UI. I really should have started earlier and used nCurses.
 
+There were some issues toward the end around PUSH and POP. We noticed them through JSR/RET. We were unable to fix them before the deadline, but will soon.
+
 ### Lawrence ###
 Definitely putting this off hurt.  
 
