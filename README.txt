@@ -1,4 +1,4 @@
-# TCSS 372 Programming Project - Phase 2 #
+# TCSS 372 Programming Project - Phase 3 #
 ## Coders ##
  * Team Daigurren
    * David Sharer
