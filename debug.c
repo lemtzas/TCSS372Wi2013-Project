@@ -183,7 +183,7 @@ char* debug_entry(CPU *cpu, Memory *memory) {
     _bold(1);
     
     //setup output location
-    _sl(BOTTOM_X, BOTTOM_Y+5);
+    _sl(BOTTOM_X, BOTTOM_Y+10);
     printf("\033[s"); //save cursor position, for loading by CPU IN/OUT instructions
     
     int command;
@@ -279,8 +279,11 @@ char* debug_entry_RUN(CPU *cpu,Memory *memory) {
     return 0;
 }
 char* debug_entry_STEP(CPU *cpu,Memory *memory) {
+    _sl(BOTTOM_X,BOTTOM_Y+10);
+    init_keyboard();
     char* err =cpu_step(cpu); if(err) return err;
     return _debug_display(cpu,memory);
+    close_keyboard();
 }
 //char* debug_entry_DUMP(CPU *cpu,Memory *memory) {
 //    //is this really needed?

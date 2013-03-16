@@ -12,7 +12,6 @@
 
 int main(int argc, char** argv)
 {
-    init_keyboard();
     CPU cpu;
     cpu_init(&cpu);
     char* err;
@@ -22,7 +21,6 @@ int main(int argc, char** argv)
         _err(1);
         printf("ERROR: %s", err);
     }
-    close_keyboard();
     return 1;
 
 }

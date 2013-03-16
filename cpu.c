@@ -599,6 +599,7 @@ char* cpu_inst_SUPMISC_INOUT(CPU *cpu) {
         default:
             return "invalid mod value in IR";
     }
+    return 0;
 }
 
 
@@ -628,16 +629,18 @@ char* check_keyboard(CPU* cpu) {
         cpu->IOPORT[IOPORT_KBD]         = 0x0001;
         cpu->IOPORT[IOPORT_KBD+2]       = ch;
     }
+    return 0;
 }
 
 char* do_output(CPU* cpu) {
     if(cpu->IOPORT[IOPORT_VID]) {
         
-        printf("\033[u"); //load cursor position
-        putchar(cpu->IOPORT[IOPORT_VID+2]);
-        printf("\033[s"); //save cursor position
+        
+        //printf("\033[u%c\033[s",cpu->IOPORT[IOPORT_VID+2]); //load cursor position
+        printf("%c",cpu->IOPORT[IOPORT_VID+2]); //load cursor position
         cpu->IOPORT[IOPORT_VID] = 0x0000;
     }
+    return 0;
 }
 
 //step the "controller" until halt

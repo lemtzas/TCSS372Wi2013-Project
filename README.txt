@@ -42,11 +42,11 @@
 
 ## Difficulties ##
 ### David ###
-Procrastination was my worst enemy on this one, combined with having 2 other projects to work on at the same time.
+Procrastination, sickness, and events struck this time. The first weekend we had to work on it, I had an event I had planned on going to. The second weekend, I was sick. Due to other work I had to do, I didn't get to work on it until very near the deadline.
 
-Other than that, I had some difficulty grappling with the ANSI Escape Codes to make a decent UI. I really should have started earlier and used nCurses.
+Other than that, there was extreme difficulty setting up things so I could get proper input. I tried to use various methods, but as it turns out ncurses is practically required. I wish I would have been told that instead of something along the lines of "it'll make things a bit easier". By the time I realized its required nature, it was too late. The input functionality was untested due to my partner's sickness, and the output functionality prints everything in the exact same spot, which is clearly unacceptable.
 
-There were some issues toward the end around PUSH and POP. We noticed them through JSR/RET. We were unable to fix them before the deadline, but will soon.
+We still seem to have issues with PUSHB and POPB. We ran out of time and were unable to fix them, though.
 
 ### Lawrence ###
 A large amount of confusion on what exactly we were supposed to implement made it hard to get started. Once he sent the e-mail refining the tasks it got easier.
