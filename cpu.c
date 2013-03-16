@@ -566,6 +566,49 @@ char* cpu_inst_SUPMISC(CPU *cpu) {
     return 0;
 }
 
+char* cpu_inst_SUPMISC_INOUT(CPU *cpu) {
+    cpu_inst_format8* ir = (cpu_inst_format8*)(&(cpu->IR));
+    switch(ir->m) {
+        case MOD_INOUT_IN:
+            switch(ir->p) {
+                case 0x38: //KBDR+0 = status
+                    cpu->rf.registers[ir->d] = 0x0001; //always ready
+                    break;
+                case 0x39: //KBDR+1 = ctrl
+                    return 0;
+                    break;
+                case 0x3A: //KBDR+2 = data0
+                    printf("\033[u"); //load cursor position
+                    cpu->rf.registers[ir->d] = getchar()&0x00FF;
+                    printf("\033[s"); //save cursor position
+                    break;
+                case 0x3B: //KBDR+3 = data1
+                    //cpu->rf.registers[ir->d] = (getchar()&0xFF00)>>8;
+                    return "not implemented";
+                    break;
+            }
+            break;
+        case MOD_INOUT_OUT:
+            switch(ir->p) {
+                case 0x30: //VID+0 = status
+                    cpu->rf.registers[ir->d] = 0x0000; //always done
+                    break;
+                case 0x31: //VID+1 = ctrl
+                    return 0;
+                    break;
+                case 0x32: //VID+2 = data
+                    printf("\033[u"); //load cursor position
+                    putchar(cpu->rf.registers[ir->d]);
+                    printf("\033[s"); //save cursor position
+                    break;
+            }
+            
+            break;
+        default:
+            return "invalid mod value in IR";
+    }
+}
+
 
 //step the "controller"
 char* cpu_step(CPU *cpu) {

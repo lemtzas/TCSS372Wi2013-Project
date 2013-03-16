@@ -52,6 +52,7 @@
 #define OP2_SHL         0
 #define OP2_SHR         2
 
+#define OP2_INOUT       0
 #define OP2_IRQ8        1
 #define OP2_HALT        2
 #define OP2_NOP         3
@@ -93,6 +94,9 @@
 #define MOD_OPER_XOR            6
 #define MOD_OPER_NOT            7
 
+#define MOD_INOUT_IN            0
+#define MOD_INOUT_OUT           1
+
 typedef struct {
     //structures
     ALU alu;
@@ -107,7 +111,6 @@ typedef struct {
     Register TXB;
     Register MAR;
     Register MDR;
-    
     unsigned char halt;
 } CPU;
 
@@ -162,6 +165,7 @@ char* cpu_inst_CONTROL_RET(CPU *cpu);
 
 //SUPERVISOR and MISC execute macrostate, calls execute for specific instruction below
 char* cpu_inst_SUPMISC(CPU *cpu);
+char* cpu_inst_SUPMISC_INOUT(CPU *cpu);
 
 
 //remember to put fields in reverse
