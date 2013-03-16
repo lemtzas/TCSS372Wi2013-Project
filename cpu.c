@@ -574,35 +574,24 @@ char* cpu_inst_SUPMISC_INOUT(CPU *cpu) {
     switch(ir->m) {
         case MOD_INOUT_IN:
             switch(ir->p) {
-                case 0x38: //KBDR+0 = status
-                    cpu->rf.registers[ir->d] = 0x0001; //always ready
-                    break;
-                case 0x39: //KBDR+1 = ctrl
-                    return 0;
-                    break;
-                case 0x3A: //KBDR+2 = data0
-                    printf("\033[u"); //load cursor position
-                    cpu->rf.registers[ir->d] = getchar()&0x00FF;
-                    printf("\033[s"); //save cursor position
-                    break;
-                case 0x3B: //KBDR+3 = data1
+                case IOPORT_KBD+3: //KBDR+3 = data1
                     //cpu->rf.registers[ir->d] = (getchar()&0xFF00)>>8;
-                    return "not implemented";
+                    cpu->rf.registers[ir->d] = cpu->rf.registers[IOPORT_KBD+3];
+                    cpu->rf.registers[IOPORT_KBD] = 0x0000; //set KBD-status to no new key
+                    break;
+                default:
+                    cpu->rf.registers[ir->d] = cpu->rf.registers[ir->p];
                     break;
             }
             break;
         case MOD_INOUT_OUT:
             switch(ir->p) {
-                case 0x30: //VID+0 = status
-                    cpu->rf.registers[ir->d] = 0x0000; //always done
+                case IOPORT_VID+2: //VID+2 = data
+                    cpu->IOPORT[IOPORT_VID] = 0x0001;
+                    cpu->IOPORT[IOPORT_VID+2] = cpu->rf.registers[ir->d]&0xFF;
                     break;
-                case 0x31: //VID+1 = ctrl
-                    return 0;
-                    break;
-                case 0x32: //VID+2 = data
-                    printf("\033[u"); //load cursor position
-                    putchar(cpu->rf.registers[ir->d]);
-                    printf("\033[s"); //save cursor position
+                default:
+                    cpu->IOPORT[ir->p] = cpu->rf.registers[ir->d]&0xFF;
                     break;
             }
             
@@ -616,6 +605,9 @@ char* cpu_inst_SUPMISC_INOUT(CPU *cpu) {
 //step the "controller"
 char* cpu_step(CPU *cpu) {
     char* err;
+    
+    err = check_keyboard(cpu); if(err)return err;
+    err = do_output(cpu); if(err)return err;
     //fetch -> decode
     if(cpu->halt) return 0;
     err = cpu_inst_fetch(cpu); if(err)return err;
@@ -629,6 +621,25 @@ char* cpu_step(CPU *cpu) {
     
     return 0;
 }
+
+char* check_keyboard(CPU* cpu) {
+    if(kbhit()) {
+        char ch = readch();
+        cpu->IOPORT[IOPORT_KBD]         = 0x0001;
+        cpu->IOPORT[IOPORT_KBD+2]       = ch;
+    }
+}
+
+char* do_output(CPU* cpu) {
+    if(cpu->IOPORT[IOPORT_VID]) {
+        
+        printf("\033[u"); //load cursor position
+        putchar(cpu->IOPORT[IOPORT_VID+2]);
+        printf("\033[s"); //save cursor position
+        cpu->IOPORT[IOPORT_VID] = 0x0000;
+    }
+}
+
 //step the "controller" until halt
 //char* cpu_run(CPU *cpu) {
 //    char* err_buff;

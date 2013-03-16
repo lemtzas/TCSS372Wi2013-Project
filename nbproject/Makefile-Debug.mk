@@ -41,6 +41,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/alu.o \
 	${OBJECTDIR}/phase1test.o \
 	${OBJECTDIR}/instFile.o \
+	${OBJECTDIR}/read_char.o \
+	${OBJECTDIR}/phase3main.o \
 	${OBJECTDIR}/phase2main.o \
 	${OBJECTDIR}/memory.o \
 	${OBJECTDIR}/global.o
@@ -60,7 +62,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-lncurses
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -73,47 +75,57 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tcss372wi2013-project.exe: ${OBJECTFI
 ${OBJECTDIR}/cpu.o: cpu.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/cpu.o cpu.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/cpu.o cpu.c
 
 ${OBJECTDIR}/register.o: register.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/register.o register.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/register.o register.c
 
 ${OBJECTDIR}/debug.o: debug.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug.o debug.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug.o debug.c
 
 ${OBJECTDIR}/alu.o: alu.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/alu.o alu.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/alu.o alu.c
 
 ${OBJECTDIR}/phase1test.o: phase1test.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase1test.o phase1test.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase1test.o phase1test.c
 
 ${OBJECTDIR}/instFile.o: instFile.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/instFile.o instFile.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/instFile.o instFile.c
+
+${OBJECTDIR}/read_char.o: read_char.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/read_char.o read_char.c
+
+${OBJECTDIR}/phase3main.o: phase3main.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase3main.o phase3main.c
 
 ${OBJECTDIR}/phase2main.o: phase2main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase2main.o phase2main.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase2main.o phase2main.c
 
 ${OBJECTDIR}/memory.o: memory.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/memory.o memory.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/memory.o memory.c
 
 ${OBJECTDIR}/global.o: global.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/global.o global.c
+	$(COMPILE.c) -g -I../../../../../cygwin/usr/include/ncurses -MMD -MP -MF $@.d -o ${OBJECTDIR}/global.o global.c
 
 # Subprojects
 .build-subprojects:

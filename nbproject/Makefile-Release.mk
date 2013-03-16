@@ -41,6 +41,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/alu.o \
 	${OBJECTDIR}/phase1test.o \
 	${OBJECTDIR}/instFile.o \
+	${OBJECTDIR}/read_char.o \
+	${OBJECTDIR}/phase3main.o \
 	${OBJECTDIR}/phase2main.o \
 	${OBJECTDIR}/memory.o \
 	${OBJECTDIR}/global.o
@@ -99,6 +101,16 @@ ${OBJECTDIR}/instFile.o: instFile.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/instFile.o instFile.c
+
+${OBJECTDIR}/read_char.o: read_char.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/read_char.o read_char.c
+
+${OBJECTDIR}/phase3main.o: phase3main.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/phase3main.o phase3main.c
 
 ${OBJECTDIR}/phase2main.o: phase2main.c 
 	${MKDIR} -p ${OBJECTDIR}

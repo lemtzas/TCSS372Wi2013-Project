@@ -10,6 +10,7 @@
       <itemPath>global.h</itemPath>
       <itemPath>instFile.h</itemPath>
       <itemPath>memory.h</itemPath>
+      <itemPath>read_char.h</itemPath>
       <itemPath>register.h</itemPath>
       <itemPath>registerFile.h</itemPath>
     </logicalFolder>
@@ -28,6 +29,8 @@
       <itemPath>memory.c</itemPath>
       <itemPath>phase1test.c</itemPath>
       <itemPath>phase2main.c</itemPath>
+      <itemPath>phase3main.c</itemPath>
+      <itemPath>read_char.c</itemPath>
       <itemPath>register.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -54,6 +57,21 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>../../../../../cygwin/usr/include/ncurses</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>C:\cygwin\usr\include\ncurses\</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerOptionItem>-lncurses</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
     </conf>
     <conf name="Release" type="1">

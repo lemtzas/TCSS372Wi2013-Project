@@ -12,6 +12,7 @@
 #include "registerFile.h"
 #include "register.h"
 #include "memory.h"
+#include "read_char.h"
 
 //default values
 #define IR_START        0x0000
@@ -97,11 +98,17 @@
 #define MOD_INOUT_IN            0
 #define MOD_INOUT_OUT           1
 
+#define IOPORT_VID              0x30
+#define IOPORT_KBD              0x38
+
+#define IOPORT_MEM_SIZE         0xff
+
 typedef struct {
     //structures
     ALU alu;
     RegisterFile rf;
     Memory memory;
+    Byte IOPORT[IOPORT_MEM_SIZE];
     
     //special registers
     StatusWord SW;
@@ -112,6 +119,7 @@ typedef struct {
     Register MAR;
     Register MDR;
     unsigned char halt;
+    
 } CPU;
 
 //initialize the cpu and its substructures
@@ -119,6 +127,8 @@ char* cpu_init  (CPU *cpu);
 //runs the controller through a single fetch-decode-execute cycle
 char* cpu_step  (CPU *cpu);
 //char* cpu_run   (CPU *cpu);
+char* check_keyboard (CPU *cpu);
+char* do_output (CPU *cpu);
 
 
 
