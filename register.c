@@ -1,7 +1,6 @@
 /*
  * File: register.c
  * Group: Dai-Gurran
- * Author: David Sharer, Lawrence Grass
  */
 #include "register.h"
 
