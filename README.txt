@@ -1,8 +1,6 @@
 # TCSS 372 Programming Project - Phase 3 #
 ## Coders ##
- * Team Daigurren
-   * David Sharer
-   * Lawrence Grass
+ * Two Students
 
 ## What to Expect ##
  * Three columns with relevant information.
